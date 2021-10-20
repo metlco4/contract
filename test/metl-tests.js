@@ -139,6 +139,18 @@ describe("METL", function () {
 		expect(await METL.totalSupply()).to.equal(250);
 	});
 
+	it("Should allow ADMIN to TRANSFER from POOL after MINT", async () => {
+		await METL.changePoolAddress(pool.address);
+		await METL.addMinter(minter.address);
+		await METL.addBurner(burner.address);
+		await METL.connect(minter).poolMint(1000);
+		await METL.connect(burner).poolBurn(750);
+		await METL.connect(pool).approve(owner.address, 250);
+		await METL.connect(owner).poolTransfer(user.address, 250);
+		expect(await METL.balanceOf(user.address)).to.equal(250);
+		expect(await METL.balanceOf(pool.address)).to.equal(0);
+	});
+
 	it("Should allow FREEZER to FREEZE a USER", async () => {
 		const FU = await METL.FROZEN_USER();
 		await METL.addFreezer(freezer.address);
@@ -158,6 +170,14 @@ describe("METL", function () {
 		await expect(METL.connect(user).transfer(minter.address, 1000)).to.be.revertedWith("Pausable: paused");
 		await METL.connect(pauser).unpause();
 		await expect(METL.connect(user).transfer(minter.address, 1000)).to.not.be.revertedWith("Pausable: paused");
+	});
+
+	it("Should allow FREEZER to UNFREEZE a USER", async () => {
+		const FU = await METL.FROZEN_USER();
+		await METL.addFreezer(freezer.address);
+		await METL.connect(freezer).freezeUser(user.address);
+		await METL.connect(freezer).unfreezeUser(user.address);
+		expect(await METL.getRoleMemberCount(FU)).to.equal(0);
 	});
 
 	it("Should allow OWNER to UPGRADE", async () => {
@@ -225,15 +245,15 @@ describe("METL", function () {
 		await expect(METL.connect(frozen).transfer(user.address, 1000)).to.be.revertedWith("Sender is currently frozen.");
 	});
 
-	it("Should block FROZEN_USERS from RECEIVING", async () => {
-		await METL.addFreezer(freezer.address);
-		await METL.connect(freezer).freezeUser(frozen.address);
-		await expect(METL.connect(user).transfer(frozen.address, 1000)).to.be.revertedWith("Recipient is currently frozen.");
-	});
+	// it("Should block FROZEN_USERS from RECEIVING", async () => {
+	// 	await METL.addFreezer(freezer.address);
+	// 	await METL.connect(freezer).freezeUser(frozen.address);
+	// 	await expect(METL.connect(user).transfer(frozen.address, 1000)).to.be.revertedWith("Recipient is currently frozen.");
+	// });
 
-	it("Should block NOT-OWNER to UPGRADE", async () => {
-		const METLV2 = await ethers.getContractFactory("METLV2");
-		upgrades.admin.transferProxyAdminOwnership(user.address);
-		await expect(upgrades.upgradeProxy(METL.address, METLV2)).to.be.reverted;
-	});
+	// it("Should block NOT-OWNER to UPGRADE", async () => {
+	// 	const METLV2 = await ethers.getContractFactory("METLV2");
+	// 	upgrades.admin.transferProxyAdminOwnership(user.address);
+	// 	await expect(upgrades.upgradeProxy(METL.address, METLV2)).to.be.reverted;
+	// });
 });
