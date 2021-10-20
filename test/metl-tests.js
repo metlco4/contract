@@ -23,6 +23,8 @@ describe("METL", function () {
 		await METL.deployed();
 	})
 
+
+
 	it("Should have a name", async () => {
 		expect(await METL.name()).to.exist;
 	})
@@ -227,5 +229,11 @@ describe("METL", function () {
 		await METL.addFreezer(freezer.address);
 		await METL.connect(freezer).freezeUser(frozen.address);
 		await expect(METL.connect(user).transfer(frozen.address, 1000)).to.be.revertedWith("Recipient is currently frozen.");
+	});
+
+	it("Should block NOT-OWNER to UPGRADE", async () => {
+		const METLV2 = await ethers.getContractFactory("METLV2");
+		upgrades.admin.transferProxyAdminOwnership(user.address);
+		await expect(upgrades.upgradeProxy(METL.address, METLV2)).to.be.reverted;
 	});
 });
