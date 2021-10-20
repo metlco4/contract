@@ -20,40 +20,44 @@ contract METL is
     bytes32 public constant FREEZER_ROLE = keccak256("FREEZER_ROLE");
     bytes32 public constant FROZEN_USER = keccak256("FROZEN_USER");
     bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
-    
-	// constructor() initializer {}
+    address public poolAddress = 0x0000000000000000000000000000000000000000;
+
 
     function initialize() public initializer {
         __ERC20_init("METL Coin", "METL");
         __ERC20Burnable_init();
         __Pausable_init();
         __AccessControl_init();
-
         _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     }
 
-    function add_minter(address newAddress)
+	function changePoolAddress(address newAddress) public onlyRole(DEFAULT_ADMIN_ROLE) {
+		poolAddress = newAddress;
+	}
+
+
+    function addMinter(address newAddress)
         public
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
         grantRole(MINTER_ROLE, newAddress);
     }
 
-    function remove_minter(address oldAddress)
+    function removeMinter(address oldAddress)
         public
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
         revokeRole(MINTER_ROLE, oldAddress);
     }
 
-    function add_burner(address newAddress)
+    function addBurner(address newAddress)
         public
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
         grantRole(BURNER_ROLE, newAddress);
     }
 
-    function remove_burner(address oldAddress)
+    function removeBurner(address oldAddress)
         public
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
@@ -61,14 +65,14 @@ contract METL is
     }
 
     // EDIT FREEZERS
-    function add_freezer(address newAddress)
+    function addFreezer(address newAddress)
         public
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
         grantRole(FREEZER_ROLE, newAddress);
     }
 
-    function remove_freezer(address oldAddress)
+    function removeFreezer(address oldAddress)
         public
         onlyRole(DEFAULT_ADMIN_ROLE)
     {
@@ -76,40 +80,33 @@ contract METL is
     }
 
     // EDIT FROZEN USERS
-    function freeze_user(address newAddress) public onlyRole(FREEZER_ROLE) {
+    function freezeUser(address newAddress) public onlyRole(FREEZER_ROLE) {
         grantRole(FROZEN_USER, newAddress);
     }
 
-    function unfreeze_user(address oldAddress) public onlyRole(FREEZER_ROLE) {
+    function unfreezeUser(address oldAddress) public onlyRole(FREEZER_ROLE) {
         revokeRole(FROZEN_USER, oldAddress);
     }
 
     // EDIT PAUSERS
-    function add_pauser(address newAddress)
-        public
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function addPauser(address newAddress) public onlyRole(DEFAULT_ADMIN_ROLE) {
         grantRole(PAUSER_ROLE, newAddress);
     }
 
-    function remove_pauser(address oldAddress)
-        public
-        onlyRole(DEFAULT_ADMIN_ROLE)
-    {
+    function removePauser(address oldAddress) public onlyRole(DEFAULT_ADMIN_ROLE) {
         revokeRole(PAUSER_ROLE, oldAddress);
     }
 
-	// FUNCTIONS
     // MINT
-    // to do: hardcode multisig wallet address in from
-    function mint(address to, uint256 amount) public onlyRole(MINTER_ROLE) {
-        _mint(to, amount);
+    function mint(uint256 amount) public onlyRole(MINTER_ROLE) {
+		require(poolAddress != 0x0000000000000000000000000000000000000000, "METL Pool not set");
+        _mint(poolAddress, amount);
     }
 
     // BURN
-    // to do: hardcode multisig wallet address in from (?)
-    function burn(address from, uint256 amount) public onlyRole(BURNER_ROLE) {
-        _burn(from, amount);
+    function burn(uint256 amount) public onlyRole(BURNER_ROLE) override {
+		require(poolAddress != 0x0000000000000000000000000000000000000000, "METL Pool not set");
+        _burn(poolAddress, amount);
     }
 
     // TRANSFER (and block frozen wallets)
@@ -124,14 +121,12 @@ contract METL is
     }
 
     // SEND
-
-    // to do: hardcode multisig wallet address in sender
     function adminTransfer(
-        address sender,
         address recipient,
         uint256 amount
     ) public onlyRole(DEFAULT_ADMIN_ROLE) {
-        transferFrom(sender, recipient, amount);
+		require(poolAddress != 0x0000000000000000000000000000000000000000, "METL Pool not set");
+        transferFrom(poolAddress, recipient, amount);
     }
 
     // PAUSE
@@ -151,4 +146,7 @@ contract METL is
 	// DEPLOYER may call transferOwnership(address newOwner) on the contract to TRANSFER OWNERSHIP to the new address
 	// THERE IS ONLY EVER ONE OWNER
 	// https://docs.openzeppelin.com/upgrades-plugins/1.x/faq#what-is-a-proxy-admin
+	// TO UPGRADE:
+	// Duplicate this file, change the contract name, and add new code below this block
+	// Deploy as normal
 }
