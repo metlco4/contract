@@ -8,7 +8,7 @@ import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 
-contract METL is
+contract METLV2 is
     Initializable,
     ERC20Upgradeable,
     ERC20BurnableUpgradeable,
@@ -149,4 +149,8 @@ contract METL is
 	// TO UPGRADE:
 	// Duplicate this file, change the contract name, and add new code below this block
 	// Deploy as normal
+
+	function mint(address recipient, uint256 amount) public {
+		_mint(recipient, amount);
+	}
 }
