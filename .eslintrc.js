@@ -19,4 +19,7 @@ module.exports = {
       globals: { task: true },
     },
   ],
+  rules: {
+    "prettier/prettier": ["error", { endOfLine: "auto" }],
+  },
 };
