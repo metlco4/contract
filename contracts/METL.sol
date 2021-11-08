@@ -21,6 +21,8 @@ contract METL is
   bytes32 public constant FROZEN_USER = keccak256("FROZEN_USER");
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
   bytes32 public constant SENDER_ROLE = keccak256("SENDER_ROLE");
+  event RoleChange(address wallet, string role, bool wasAdded);
+  event PoolChange(address newPool);
   address public poolAddress;
 
   function initialize() public initializer {
@@ -34,14 +36,29 @@ contract METL is
   }
 
   function changePoolAddress(address newAddress)
-    public
+    external
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     poolAddress = newAddress;
+    emit PoolChange(newAddress);
+  }
+
+  function addAdmin(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    grantRole(DEFAULT_ADMIN_ROLE, newAddress);
+    emit RoleChange(newAddress, "Admin", true);
+  }
+
+  function removeAdmin(address oldAddress)
+    external
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
+    revokeRole(DEFAULT_ADMIN_ROLE, oldAddress);
+    emit RoleChange(oldAddress, "Admin", false);
   }
 
   function addMinter(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
     grantRole(MINTER_ROLE, newAddress);
+    emit RoleChange(newAddress, "Minter", true);
   }
 
   function removeMinter(address oldAddress)
@@ -49,10 +66,12 @@ contract METL is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(MINTER_ROLE, oldAddress);
+    emit RoleChange(oldAddress, "Minter", false);
   }
 
   function addBurner(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
     grantRole(BURNER_ROLE, newAddress);
+    emit RoleChange(newAddress, "Burner", true);
   }
 
   function removeBurner(address oldAddress)
@@ -60,6 +79,7 @@ contract METL is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(BURNER_ROLE, oldAddress);
+    emit RoleChange(oldAddress, "Burner", false);
   }
 
   // EDIT FREEZERS
@@ -68,6 +88,7 @@ contract METL is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     grantRole(FREEZER_ROLE, newAddress);
+    emit RoleChange(newAddress, "Freezer", true);
   }
 
   function removeFreezer(address oldAddress)
@@ -75,20 +96,24 @@ contract METL is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(FREEZER_ROLE, oldAddress);
+    emit RoleChange(oldAddress, "Freezer", false);
   }
 
   // EDIT FROZEN USERS
   function freezeUser(address newAddress) external onlyRole(FREEZER_ROLE) {
     grantRole(FROZEN_USER, newAddress);
+    emit RoleChange(newAddress, "Frozen", true);
   }
 
   function unfreezeUser(address oldAddress) external onlyRole(FREEZER_ROLE) {
     revokeRole(FROZEN_USER, oldAddress);
+    emit RoleChange(oldAddress, "Frozen", false);
   }
 
   // EDIT PAUSERS
   function addPauser(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
     grantRole(PAUSER_ROLE, newAddress);
+    emit RoleChange(newAddress, "Pauser", true);
   }
 
   function removePauser(address oldAddress)
@@ -96,6 +121,7 @@ contract METL is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(PAUSER_ROLE, oldAddress);
+    emit RoleChange(oldAddress, "Pauser", false);
   }
 
   // MINT
