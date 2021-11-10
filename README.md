@@ -1,42 +1,61 @@
-# Advanced Sample Hardhat Project
+# METL ERC20 Smart Contract
 
-This project demonstrates an advanced Hardhat use case, integrating other tools commonly used alongside Hardhat in the ecosystem.
+### Develop Locally
 
-The project comes with a sample contract, a test for that contract, a sample script that deploys that contract, and an example of a task implementation, which simply lists the available accounts. It also comes with a variety of other tools, preconfigured to work with the project code.
+Download files and run `yarn`
 
-Try running some of the following tasks:
+## Upgrading
 
-```shell
-npx hardhat accounts
-npx hardhat compile
-npx hardhat clean
-npx hardhat test
-npx hardhat node
-npx hardhat help
-REPORT_GAS=true npx hardhat test
-npx hardhat coverage
-npx hardhat run scripts/deploy.js
-node scripts/deploy.js
-npx eslint '**/*.js'
-npx eslint '**/*.js' --fix
-npx prettier '**/*.{json,sol,md}' --check
-npx prettier '**/*.{json,sol,md}' --write
-npx solhint 'contracts/**/*.sol'
-npx solhint 'contracts/**/*.sol' --fix
+Download and run `yarn`
+
+Duplicate `src/contracts/METL.sol`
+
+Rename duplicated solidity file to whatever you please. We recommend `METLvX.sol`
+**Important:** you must also rename the contract on line 32 to match filename (for testing).
+
+Add new code below line 286.
+Refer to code comments in lines 277 to 286 for upgrade deployment instructions.
+The original deployer is Mackenzie on Rinkeby and Avalanche C-Chain.
+
+## Testing
+
+Duplicate `src/test/metl-tests.js`
+
+Edit the string on line 17
+
+```
+    Token = await ethers.getContractFactory("CONTRACT_NAME_HERE");
 ```
 
-# Etherscan verification
+That string is used to iterate through `src/contracts/*.sol` looking for a contract with exactly that name.
 
-To try out Etherscan verification, you first need to deploy a contract to an Ethereum network that's supported by Etherscan, such as Ropsten.
+Add tests using Mocha, Chai, and Ethers.
 
-In this project, copy the .env.example file to a file named .env, and then edit it to fill in the details. Enter your Etherscan API key, your Ropsten node URL (eg from Alchemy), and the private key of the account which will send the deployment transaction. With a valid .env file in place, first deploy your contract:
+To run tests, run `npx hardhat test` from the command line.
 
-```shell
-hardhat run --network ropsten scripts/deploy.js
+## Deploying
+
+### To deploy to ETH Mainnet or Testnets, add a network to `src/hardhat.config.js`
+
+```
+  networks: {
+    rinkeby: {
+      url: process.env.RINKEBY_URL || "",
+      accounts:
+        process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+    },
+		mainnet: {
+			url: process.env.MAINNET_URL || "",
+			accounts: process.env.PRIVATE_KEY !== undefined ? [process.env.PRIVATE_KEY] : [],
+		}
+  },
 ```
 
-Then, copy the deployment address and paste it in to replace `DEPLOYED_CONTRACT_ADDRESS` in this command:
+where `*_URL` is an alchemy api URL and `PRIVATE_KEY` is a deployer hotwallet private key stored in
+`src/.env` (this file is ignored by git, you'll need to create it locally to deploy.)
+**Important:** storing private keys in `.env` is dangerous. Make sure it's a hot wallet and transfer ownership to a more secure wallet soon after deploying on Mainnet.
 
-```shell
-npx hardhat verify --network ropsten DEPLOYED_CONTRACT_ADDRESS "Hello, Hardhat!"
-```
+### To deploy on Avalanche C-Chain:
+
+Duplicate contents of your solidity file to a new Remix window.
+Follow the [instructions here](https://docs.avax.network/build/tutorials/smart-contracts/deploy-a-smart-contract-on-avalanche-using-remix-and-metamask)
