@@ -295,11 +295,12 @@ contract METL is
    * @param recipient address tokens will be registered to
    * @param amount how many tokens to send
    */
-  function poolTransfer(address recipient, uint256 amount)
-    public
-    onlyRole(DEFAULT_ADMIN_ROLE)
-  {
-    require(poolAddress != address(0), "METL Pool not set");
+  function poolTransfer(
+    address sender,
+    address recipient,
+    uint256 amount
+  ) public onlyRole(DEFAULT_ADMIN_ROLE) {
+    require(hasRole(MULTISIG_ROLE, sender), "Recipient must be whitelisted.");
     transferFrom(poolAddress, recipient, amount);
   }
 
