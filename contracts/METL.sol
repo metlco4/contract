@@ -51,6 +51,9 @@ contract METL is
   // Role for pausers
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
+  // Role for Multisig
+  bytes32 public constant MULTISIG_ROLE = keccak256("MULTISIG_ROLE");
+
   // Emit event for role changes
   event RoleChange(address wallet, string role, bool wasAdded);
 
@@ -106,6 +109,30 @@ contract METL is
   {
     revokeRole(DEFAULT_ADMIN_ROLE, oldAddress);
     emit RoleChange(oldAddress, "Admin", false);
+  }
+
+  /**
+   * @notice Whitelists a bank multisig address
+   * @param newAddress address of multisig to add
+   */
+  function addMultisig(address newAddress)
+    external
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
+    grantRole(MULTISIG_ROLE, newAddress);
+    emit RoleChange(newAddress, "Multisig", true);
+  }
+
+  /**
+   * @notice Whitelists a bank multisig address
+   * @param oldAddress address of multisig to add
+   */
+  function revokeMultisig(address oldAddress)
+    external
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
+    grantRole(MULTISIG_ROLE, oldAddress);
+    emit RoleChange(oldAddress, "Multisig", false);
   }
 
   /**
@@ -220,6 +247,22 @@ contract METL is
   function poolMint(uint256 amount) external onlyRole(MINTER_ROLE) {
     require(poolAddress != address(0), "METL Pool not set");
     _mint(poolAddress, amount);
+  }
+
+  /**
+   * @notice Minters may mint tokens to a whitelisted pool
+   * @param recipient the whitelisted multisig to mint to
+   * @param amount how many tokens to mint
+   */
+  function bankMint(address recipient, uint256 amount)
+    external
+    onlyRole(MINTER_ROLE)
+  {
+    require(
+      hasRole(MULTISIG_ROLE, recipient),
+      "Recipient must be whitelisted."
+    );
+    _mint(recipient, amount);
   }
 
   /**
