@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicensed
-pragma solidity ^0.8.0;
+pragma solidity 0.8.10;
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //      ...     ..      ..           ..      .         .....                ...       //
@@ -54,15 +54,6 @@ contract METL is
   // Role for Multisig
   bytes32 public constant MULTISIG_ROLE = keccak256("MULTISIG_ROLE");
 
-  // Emit event for role changes
-  event RoleChange(address wallet, string role, bool wasAdded);
-
-  // Emit event for pooladdress changes
-  event PoolChange(address newPool);
-
-  // Address for mint/burn pool
-  address public poolAddress;
-
   /**
    * @notice Initializes contract and sets state variables
    * Note: no params, just assigns deployer to default_admin_role
@@ -72,31 +63,16 @@ contract METL is
     __ERC20Burnable_init();
     __Pausable_init();
     __AccessControl_init();
-    poolAddress = address(0);
     _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     _setRoleAdmin(FROZEN_USER, FREEZER_ROLE);
-  }
-
-  /**
-   * @notice Admins may update the shared pool address
-   * @param newAddress address of new pool
-   */
-  function changePoolAddress(address newAddress)
-    external
-    onlyRole(DEFAULT_ADMIN_ROLE)
-  {
-    poolAddress = newAddress;
-    emit PoolChange(newAddress);
   }
 
   /**
    * @notice Admins may add other admins
    * @param newAddress address of new admin
    */
-
   function addAdmin(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
     grantRole(DEFAULT_ADMIN_ROLE, newAddress);
-    emit RoleChange(newAddress, "Admin", true);
   }
 
   /**
@@ -108,7 +84,6 @@ contract METL is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(DEFAULT_ADMIN_ROLE, oldAddress);
-    emit RoleChange(oldAddress, "Admin", false);
   }
 
   /**
@@ -120,7 +95,6 @@ contract METL is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     grantRole(MULTISIG_ROLE, newAddress);
-    emit RoleChange(newAddress, "Multisig", true);
   }
 
   /**
@@ -132,7 +106,6 @@ contract METL is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     grantRole(MULTISIG_ROLE, oldAddress);
-    emit RoleChange(oldAddress, "Multisig", false);
   }
 
   /**
@@ -141,7 +114,6 @@ contract METL is
    */
   function addMinter(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
     grantRole(MINTER_ROLE, newAddress);
-    emit RoleChange(newAddress, "Minter", true);
   }
 
   /**
@@ -153,7 +125,6 @@ contract METL is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(MINTER_ROLE, oldAddress);
-    emit RoleChange(oldAddress, "Minter", false);
   }
 
   /**
@@ -162,7 +133,6 @@ contract METL is
    */
   function addBurner(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
     grantRole(BURNER_ROLE, newAddress);
-    emit RoleChange(newAddress, "Burner", true);
   }
 
   /**
@@ -174,7 +144,6 @@ contract METL is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(BURNER_ROLE, oldAddress);
-    emit RoleChange(oldAddress, "Burner", false);
   }
 
   /**
@@ -186,7 +155,6 @@ contract METL is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     grantRole(FREEZER_ROLE, newAddress);
-    emit RoleChange(newAddress, "Freezer", true);
   }
 
   /**
@@ -198,7 +166,6 @@ contract METL is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(FREEZER_ROLE, oldAddress);
-    emit RoleChange(oldAddress, "Freezer", false);
   }
 
   /**
@@ -207,7 +174,6 @@ contract METL is
    */
   function freezeUser(address newAddress) external onlyRole(FREEZER_ROLE) {
     grantRole(FROZEN_USER, newAddress);
-    emit RoleChange(newAddress, "Frozen", true);
   }
 
   /**
@@ -216,7 +182,6 @@ contract METL is
    */
   function unfreezeUser(address oldAddress) external onlyRole(FREEZER_ROLE) {
     revokeRole(FROZEN_USER, oldAddress);
-    emit RoleChange(oldAddress, "Frozen", false);
   }
 
   /**
@@ -225,7 +190,6 @@ contract METL is
    */
   function addPauser(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
     grantRole(PAUSER_ROLE, newAddress);
-    emit RoleChange(newAddress, "Pauser", true);
   }
 
   /**
@@ -237,16 +201,6 @@ contract METL is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(PAUSER_ROLE, oldAddress);
-    emit RoleChange(oldAddress, "Pauser", false);
-  }
-
-  /**
-   * @notice Minters may mint tokens to a pool
-   * @param amount how many tokens to mint
-   */
-  function poolMint(uint256 amount) external onlyRole(MINTER_ROLE) {
-    require(poolAddress != address(0), "METL Pool not set");
-    _mint(poolAddress, amount);
   }
 
   /**
@@ -267,11 +221,14 @@ contract METL is
 
   /**
    * @notice Burners may burn tokens from a pool
+   * @param target the address to burn from
    * @param amount how many tokens to burn
    */
-  function poolBurn(uint256 amount) external onlyRole(BURNER_ROLE) {
-    require(poolAddress != address(0), "METL Pool not set");
-    _burn(poolAddress, amount);
+  function bankBurn(address target, uint256 amount)
+    external
+    onlyRole(BURNER_ROLE)
+  {
+    _burn(target, amount);
   }
 
   /**
@@ -291,17 +248,18 @@ contract METL is
   }
 
   /**
-   * @notice Admins may send tokens from a pool
+   * @notice Admins may send tokens from a bank
+   * @param sender the address to send tokens from
    * @param recipient address tokens will be registered to
    * @param amount how many tokens to send
    */
-  function poolTransfer(
+  function bankTransfer(
     address sender,
     address recipient,
     uint256 amount
   ) public onlyRole(DEFAULT_ADMIN_ROLE) {
     require(hasRole(MULTISIG_ROLE, sender), "Recipient must be whitelisted.");
-    transferFrom(poolAddress, recipient, amount);
+    transferFrom(sender, recipient, amount);
   }
 
   /**
@@ -316,6 +274,15 @@ contract METL is
    */
   function unpause() public onlyRole(PAUSER_ROLE) {
     _unpause();
+  }
+
+  function renounceRole(bytes32 role, address account) public override {
+    if (role == DEFAULT_ADMIN_ROLE) {
+      require(getRoleMemberCount(role) > 1, "Contract requires one admin");
+      revokeRole(role, account);
+    }
+    require(account == _msgSender(), "Can only renounce self");
+    revokeRole(role, account);
   }
 
   // UPGRADE
