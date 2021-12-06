@@ -131,7 +131,13 @@ describe("METL", function () {
     await METL.addPauser(pauser.address);
     await METL.removePauser(pauser.address);
     expect(await METL.getRoleMemberCount(PR)).to.equal(0);
-  });
+	});
+	
+	it("Should block last ADMIN from revoking own role", async () => {
+		const AR = await METL.DEFAULT_ADMIN_ROLE();
+		 // eslint-disable-next-line no-unused-expressions
+		await expect(METL.revokeRole(AR, owner.address)).to.be.revertedWith("Contract requires one admin");
+	})
 
   it("Should allow MINTER to MINT", async () => {
     await METL.addMultisig(pool.address);
