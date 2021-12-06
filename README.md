@@ -59,3 +59,6 @@ where `*_URL` is an alchemy api URL and `PRIVATE_KEY` is a deployer hotwallet pr
 
 Duplicate contents of your solidity file to a new Remix window.
 Follow the [instructions here](https://docs.avax.network/build/tutorials/smart-contracts/deploy-a-smart-contract-on-avalanche-using-remix-and-metamask)
+
+## DAPP User Guide:
+https://hackmd.io/@N6gQB3PZSY-b9EWhAgPtbw/BJeq6u6DY
