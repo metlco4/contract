@@ -83,6 +83,10 @@ contract METL is
     external
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
+    require(
+      getRoleMemberCount(DEFAULT_ADMIN_ROLE) > 1,
+      "Need at least one admin"
+    );
     revokeRole(DEFAULT_ADMIN_ROLE, oldAddress);
   }
 
@@ -276,13 +280,12 @@ contract METL is
     _unpause();
   }
 
-  function renounceRole(bytes32 role, address account) public override {
+  function revokeRole(bytes32 role, address account) public override {
     if (role == DEFAULT_ADMIN_ROLE) {
       require(getRoleMemberCount(role) > 1, "Contract requires one admin");
-      revokeRole(role, account);
+      super.revokeRole(role, account);
     }
-    require(account == _msgSender(), "Can only renounce self");
-    revokeRole(role, account);
+    super.revokeRole(role, account);
   }
 
   // UPGRADE
