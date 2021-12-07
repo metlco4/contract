@@ -68,6 +68,16 @@ contract METL is
   }
 
   /**
+   * @notice Modified Revoke Role for security
+   */
+  function revokeRole(bytes32 role, address account) public override {
+    if (role == DEFAULT_ADMIN_ROLE) {
+      require(getRoleMemberCount(role) > 1, "Contract requires one admin");
+    }
+    super.revokeRole(role, account);
+  }
+
+  /**
    * @notice Admins may add other admins
    * @param newAddress address of new admin
    */
@@ -83,10 +93,6 @@ contract METL is
     external
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
-    require(
-      getRoleMemberCount(DEFAULT_ADMIN_ROLE) > 1,
-      "Need at least one admin"
-    );
     revokeRole(DEFAULT_ADMIN_ROLE, oldAddress);
   }
 
@@ -109,7 +115,7 @@ contract METL is
     external
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
-    grantRole(MULTISIG_ROLE, oldAddress);
+    revokeRole(MULTISIG_ROLE, oldAddress);
   }
 
   /**
@@ -252,21 +258,6 @@ contract METL is
   }
 
   /**
-   * @notice Admins may send tokens from a bank
-   * @param sender the address to send tokens from
-   * @param recipient address tokens will be registered to
-   * @param amount how many tokens to send
-   */
-  function bankTransfer(
-    address sender,
-    address recipient,
-    uint256 amount
-  ) public onlyRole(DEFAULT_ADMIN_ROLE) {
-    require(hasRole(MULTISIG_ROLE, sender), "Recipient must be whitelisted.");
-    transferFrom(sender, recipient, amount);
-  }
-
-  /**
    * @notice Pausers may pause the network
    */
   function pause() public onlyRole(PAUSER_ROLE) {
@@ -278,14 +269,6 @@ contract METL is
    */
   function unpause() public onlyRole(PAUSER_ROLE) {
     _unpause();
-  }
-
-  function revokeRole(bytes32 role, address account) public override {
-    if (role == DEFAULT_ADMIN_ROLE) {
-      require(getRoleMemberCount(role) > 1, "Contract requires one admin");
-      super.revokeRole(role, account);
-    }
-    super.revokeRole(role, account);
   }
 
   // UPGRADE

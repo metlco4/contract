@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicensed
-pragma solidity ^0.8.0;
+pragma solidity 0.8.10;
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //      ...     ..      ..           ..      .         .....                ...       //
@@ -51,14 +51,8 @@ contract METLv2 is
   // Role for pausers
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
-  // Emit event for role changes
-  event RoleChange(address wallet, string role, bool wasAdded);
-
-  // Emit event for pooladdress changes
-  event PoolChange(address newPool);
-
-  // Address for mint/burn pool
-  address public poolAddress;
+  // Role for Multisig
+  bytes32 public constant MULTISIG_ROLE = keccak256("MULTISIG_ROLE");
 
   /**
    * @notice Initializes contract and sets state variables
@@ -69,31 +63,26 @@ contract METLv2 is
     __ERC20Burnable_init();
     __Pausable_init();
     __AccessControl_init();
-    poolAddress = address(0);
     _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     _setRoleAdmin(FROZEN_USER, FREEZER_ROLE);
   }
 
   /**
-   * @notice Admins may update the shared pool address
-   * @param newAddress address of new pool
+   * @notice Modified Revoke Role for security
    */
-  function changePoolAddress(address newAddress)
-    external
-    onlyRole(DEFAULT_ADMIN_ROLE)
-  {
-    poolAddress = newAddress;
-    emit PoolChange(newAddress);
+  function revokeRole(bytes32 role, address account) public override {
+    if (role == DEFAULT_ADMIN_ROLE) {
+      require(getRoleMemberCount(role) > 1, "Contract requires one admin");
+    }
+    super.revokeRole(role, account);
   }
 
   /**
    * @notice Admins may add other admins
    * @param newAddress address of new admin
    */
-
   function addAdmin(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
     grantRole(DEFAULT_ADMIN_ROLE, newAddress);
-    emit RoleChange(newAddress, "Admin", true);
   }
 
   /**
@@ -105,7 +94,28 @@ contract METLv2 is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(DEFAULT_ADMIN_ROLE, oldAddress);
-    emit RoleChange(oldAddress, "Admin", false);
+  }
+
+  /**
+   * @notice Whitelists a bank multisig address
+   * @param newAddress address of multisig to add
+   */
+  function addMultisig(address newAddress)
+    external
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
+    grantRole(MULTISIG_ROLE, newAddress);
+  }
+
+  /**
+   * @notice Whitelists a bank multisig address
+   * @param oldAddress address of multisig to add
+   */
+  function revokeMultisig(address oldAddress)
+    external
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
+    revokeRole(MULTISIG_ROLE, oldAddress);
   }
 
   /**
@@ -114,7 +124,6 @@ contract METLv2 is
    */
   function addMinter(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
     grantRole(MINTER_ROLE, newAddress);
-    emit RoleChange(newAddress, "Minter", true);
   }
 
   /**
@@ -126,7 +135,6 @@ contract METLv2 is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(MINTER_ROLE, oldAddress);
-    emit RoleChange(oldAddress, "Minter", false);
   }
 
   /**
@@ -135,7 +143,6 @@ contract METLv2 is
    */
   function addBurner(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
     grantRole(BURNER_ROLE, newAddress);
-    emit RoleChange(newAddress, "Burner", true);
   }
 
   /**
@@ -147,7 +154,6 @@ contract METLv2 is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(BURNER_ROLE, oldAddress);
-    emit RoleChange(oldAddress, "Burner", false);
   }
 
   /**
@@ -159,7 +165,6 @@ contract METLv2 is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     grantRole(FREEZER_ROLE, newAddress);
-    emit RoleChange(newAddress, "Freezer", true);
   }
 
   /**
@@ -171,7 +176,6 @@ contract METLv2 is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(FREEZER_ROLE, oldAddress);
-    emit RoleChange(oldAddress, "Freezer", false);
   }
 
   /**
@@ -180,7 +184,6 @@ contract METLv2 is
    */
   function freezeUser(address newAddress) external onlyRole(FREEZER_ROLE) {
     grantRole(FROZEN_USER, newAddress);
-    emit RoleChange(newAddress, "Frozen", true);
   }
 
   /**
@@ -189,7 +192,6 @@ contract METLv2 is
    */
   function unfreezeUser(address oldAddress) external onlyRole(FREEZER_ROLE) {
     revokeRole(FROZEN_USER, oldAddress);
-    emit RoleChange(oldAddress, "Frozen", false);
   }
 
   /**
@@ -198,7 +200,6 @@ contract METLv2 is
    */
   function addPauser(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
     grantRole(PAUSER_ROLE, newAddress);
-    emit RoleChange(newAddress, "Pauser", true);
   }
 
   /**
@@ -210,25 +211,34 @@ contract METLv2 is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(PAUSER_ROLE, oldAddress);
-    emit RoleChange(oldAddress, "Pauser", false);
   }
 
   /**
-   * @notice Minters may mint tokens to a pool
+   * @notice Minters may mint tokens to a whitelisted pool
+   * @param recipient the whitelisted multisig to mint to
    * @param amount how many tokens to mint
    */
-  function poolMint(uint256 amount) external onlyRole(MINTER_ROLE) {
-    require(poolAddress != address(0), "METL Pool not set");
-    _mint(poolAddress, amount);
+  function bankMint(address recipient, uint256 amount)
+    external
+    onlyRole(MINTER_ROLE)
+  {
+    require(
+      hasRole(MULTISIG_ROLE, recipient),
+      "Recipient must be whitelisted."
+    );
+    _mint(recipient, amount);
   }
 
   /**
    * @notice Burners may burn tokens from a pool
+   * @param target the address to burn from
    * @param amount how many tokens to burn
    */
-  function poolBurn(uint256 amount) external onlyRole(BURNER_ROLE) {
-    require(poolAddress != address(0), "METL Pool not set");
-    _burn(poolAddress, amount);
+  function bankBurn(address target, uint256 amount)
+    external
+    onlyRole(BURNER_ROLE)
+  {
+    _burn(target, amount);
   }
 
   /**
@@ -245,19 +255,6 @@ contract METLv2 is
     require(!hasRole(FROZEN_USER, sender), "Sender is currently frozen.");
     require(!hasRole(FROZEN_USER, recipient), "Recipient is currently frozen.");
     super._beforeTokenTransfer(sender, recipient, amount);
-  }
-
-  /**
-   * @notice Admins may send tokens from a pool
-   * @param recipient address tokens will be registered to
-   * @param amount how many tokens to send
-   */
-  function poolTransfer(address recipient, uint256 amount)
-    public
-    onlyRole(DEFAULT_ADMIN_ROLE)
-  {
-    require(poolAddress != address(0), "METL Pool not set");
-    transferFrom(poolAddress, recipient, amount);
   }
 
   /**
@@ -284,7 +281,6 @@ contract METLv2 is
   // TO UPGRADE:
   // Duplicate this file, change the contract name, and add new code below this block
   // Deploy as normal
-
   function mint(address recipient, uint256 amount) public {
     _mint(recipient, amount);
   }

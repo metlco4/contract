@@ -155,18 +155,6 @@ describe("METL", function () {
     expect(await METL.totalSupply()).to.equal(250);
   });
 
-  it("Should allow ADMIN to TRANSFER from POOL after MINT", async () => {
-    await METL.addMultisig(pool.address);
-    await METL.addMinter(minter.address);
-    await METL.addBurner(burner.address);
-    await METL.connect(minter).bankMint(pool.address, 1000);
-    await METL.connect(burner).bankBurn(pool.address, 750);
-    await METL.connect(pool).approve(owner.address, 250);
-    await METL.connect(owner).bankTransfer(pool.address, user.address, 250);
-    expect(await METL.balanceOf(user.address)).to.equal(250);
-    expect(await METL.balanceOf(pool.address)).to.equal(0);
-  });
-
   it("Should allow FREEZER to FREEZE a USER", async () => {
     const FU = await METL.FROZEN_USER();
     await METL.addFreezer(freezer.address);
@@ -203,7 +191,7 @@ describe("METL", function () {
   });
 
   it("Should allow OWNER to UPGRADE", async () => {
-    const METLV2 = await ethers.getContractFactory("METLV2");
+    const METLV2 = await ethers.getContractFactory("METLv2");
     const nuMETL = await upgrades.upgradeProxy(METL.address, METLV2);
     await nuMETL.mint(user.address, 1000);
     expect(await nuMETL.balanceOf(user.address)).to.equal(1000);
@@ -285,11 +273,10 @@ describe("METL", function () {
     await METL.addMinter(minter.address);
     await METL.addMultisig(pool.address);
     await METL.connect(minter).bankMint(pool.address, 1000);
-    await METL.connect(pool).approve(owner.address, 1000);
-    await METL.connect(owner).bankTransfer(pool.address, user.address, 1000);
+    await METL.connect(pool).transfer(frozen.address, 1000);
     await METL.connect(freezer).freezeUser(frozen.address);
     await expect(
-      METL.connect(owner).bankTransfer(pool.address, frozen.address, 1000)
+      METL.connect(pool).transfer(frozen.address, 1000)
     ).to.be.revertedWith("Recipient is currently frozen.");
   });
 
