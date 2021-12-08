@@ -280,6 +280,18 @@ describe("METL", function () {
     ).to.be.revertedWith("Recipient is currently frozen.");
   });
 
+	it("Should block FROZEN_USERS from RENOUNCING", async () => {
+		await METL.addFreezer(freezer.address);
+		await METL.connect(freezer).freezeUser(frozen.address);
+		const FR = await METL.FROZEN_USER();
+		await expect(METL.connect(frozen).renounceRole(FR, frozen.address)).to.be.revertedWith("Only role admin can revoke.");
+	});
+	
+	it("Should block last ADMIN from RENOUNCING", async () => {
+		const DAR = await METL.DEFAULT_ADMIN_ROLE();
+		await expect(METL.renounceRole(DAR, owner.address)).to.be.revertedWith("Contract requires one admin")
+	});
+
   // it("Should block NOT-OWNER to UPGRADE", async () => {
   // 	const METLV2 = await ethers.getContractFactory("METLV2");
   // 	upgrades.admin.transferProxyAdminOwnership(user.address);

@@ -77,6 +77,16 @@ contract METL is
     super.revokeRole(role, account);
   }
 
+  function renounceRole(bytes32 role, address account) public override {
+    if (role == FROZEN_USER) {
+      require(hasRole(FREEZER_ROLE, msg.sender), "Only role admin can revoke.");
+    }
+    if (role == DEFAULT_ADMIN_ROLE) {
+      require(getRoleMemberCount(role) > 1, "Contract requires one admin");
+    }
+    super.renounceRole(role, account);
+  }
+
   /**
    * @notice Admins may add other admins
    * @param newAddress address of new admin
