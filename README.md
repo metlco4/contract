@@ -64,3 +64,4 @@ Follow the [instructions here](https://docs.avax.network/build/tutorials/smart-c
 https://hackmd.io/@N6gQB3PZSY-b9EWhAgPtbw/BJeq6u6DY
 
 ## Audit Result:
+https://github.com/metlco4/contract/blob/main/METL_AUDIT.pdf
