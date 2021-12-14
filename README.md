@@ -62,3 +62,5 @@ Follow the [instructions here](https://docs.avax.network/build/tutorials/smart-c
 
 ## DAPP User Guide:
 https://hackmd.io/@N6gQB3PZSY-b9EWhAgPtbw/BJeq6u6DY
+
+## Audit Result:
