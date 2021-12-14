@@ -1,5 +1,13 @@
 # METL ERC20 Smart Contract
 
+## Addresses
+
+Metl is published on Avalanche Mainnet and Fuji.
+
+Fuji Address: 0xBc4A2b0B65e39bAE9bedad1798B824EAf0A60639
+
+C-Chain / Mainnet: 0x8d38163515DA8D997E63230Fb7c3375dF5274294
+
 ### Develop Locally
 
 Download files and run `yarn`
@@ -61,7 +69,9 @@ Duplicate contents of your solidity file to a new Remix window.
 Follow the [instructions here](https://docs.avax.network/build/tutorials/smart-contracts/deploy-a-smart-contract-on-avalanche-using-remix-and-metamask)
 
 ## DAPP User Guide:
+
 https://hackmd.io/@N6gQB3PZSY-b9EWhAgPtbw/BJeq6u6DY
 
 ## Audit Result:
+
 https://github.com/metlco4/contract/blob/main/METL_AUDIT.pdf
