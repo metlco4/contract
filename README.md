@@ -6,7 +6,7 @@ Metl is published on Avalanche Mainnet and Fuji.
 
 Fuji Address: 0xBc4A2b0B65e39bAE9bedad1798B824EAf0A60639
 
-C-Chain / Mainnet: 0x8d38163515DA8D997E63230Fb7c3375dF5274294
+C-Chain / Mainnet: 0x1C59e9e44b7983931E0aBA8dd0b8571C5f34cC87
 
 ### Develop Locally
 
