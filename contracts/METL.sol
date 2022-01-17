@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicensed
-pragma solidity 0.8.10;
+pragma solidity 0.8.11;
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //      ...     ..      ..           ..      .         .....                ...       //
@@ -29,7 +29,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
  *
  * @author mpbowes, dcoleman, mkdir
  */
-contract METL is
+contract SyntheticUSD is
   Initializable,
   ERC20Upgradeable,
   ERC20BurnableUpgradeable,
@@ -54,17 +54,34 @@ contract METL is
   // Role for Multisig
   bytes32 public constant MULTISIG_ROLE = keccak256("MULTISIG_ROLE");
 
+  // Basis Point values
+  int256 public variableRate;
+  int256 public constant BASIS_RATE = 10000;
+
   /**
    * @notice Initializes contract and sets state variables
    * Note: no params, just assigns deployer to default_admin_role
    */
   function initialize() public initializer {
-    __ERC20_init("METL Coin", "METL");
+    __ERC20_init("Synthetic USD", "USDS");
     __ERC20Burnable_init();
     __Pausable_init();
     __AccessControl_init();
     _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     _setRoleAdmin(FROZEN_USER, FREEZER_ROLE);
+    variableRate = 100;
+  }
+
+  /**
+   * @notice Modify basis point variable rate
+   */
+  function updateVariableRate(int256 newRate)
+    public
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
+    require(newRate < 10000, "New Rate Too Large");
+    require(newRate > 1, "New Rate Too Small");
+    variableRate = newRate;
   }
 
   /**
@@ -236,7 +253,10 @@ contract METL is
       hasRole(MULTISIG_ROLE, recipient),
       "Recipient must be whitelisted."
     );
-    _mint(recipient, amount);
+    uint256 fee = amount.mul(variableRate.div(BASIS_RATE));
+    uint256 _amount = amount.sub(fee);
+    _mint(msg.sender, fee);
+    _mint(recipient, _amount);
   }
 
   /**
@@ -248,6 +268,8 @@ contract METL is
     external
     onlyRole(BURNER_ROLE)
   {
+    uint256 fee = amount.mul(variableRate.div(BASIS_RATE));
+    _mint(msg.sender, fee);
     _burn(target, amount);
   }
 
