@@ -14,7 +14,7 @@ describe("METL", function () {
   let user;
 
   beforeEach(async function () {
-    Token = await ethers.getContractFactory("METL");
+    Token = await ethers.getContractFactory("METLV3");
     [owner, minter, burner, pauser, freezer, frozen, pool, user] =
       await ethers.getSigners();
     METL = await upgrades.deployProxy(Token);
@@ -191,10 +191,12 @@ describe("METL", function () {
   });
 
   it("Should allow OWNER to UPGRADE", async () => {
-    const METLV2 = await ethers.getContractFactory("METLv2");
-    const nuMETL = await upgrades.upgradeProxy(METL.address, METLV2);
-    await nuMETL.mint(user.address, 1000);
-    expect(await nuMETL.balanceOf(user.address)).to.equal(1000);
+    const METLV3 = await ethers.getContractFactory("METLV3");
+    const nuMETL = await upgrades.upgradeProxy(METL.address, METLV3);
+    await METL.addMinter(owner.address);
+    await METL.addMultisig(owner.address);
+    await nuMETL.bankMint(owner.address, 1000);
+    expect(await nuMETL.balanceOf(owner.address)).to.equal(1000);
   });
 
   it("Should block NOT-MINTERS from MINTING to MULTISIG", async () => {

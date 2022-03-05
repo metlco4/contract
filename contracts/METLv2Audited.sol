@@ -23,14 +23,13 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20Burnable
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 
 /**
  * @title ERC20 token for Metl by RaidGuild
  *
  * @author mpbowes, dcoleman, mkdir
  */
-contract USDReceipt is
+contract METLv2 is
   Initializable,
   ERC20Upgradeable,
   ERC20BurnableUpgradeable,
@@ -55,38 +54,17 @@ contract USDReceipt is
   // Role for Multisig
   bytes32 public constant MULTISIG_ROLE = keccak256("MULTISIG_ROLE");
 
-  // Basis Point values
-  uint256 public variableRate;
-  uint256 public constant BASIS_RATE = 1000000000000;
-
-  event Fee(address indexed feeReceiver, uint256 indexed issueAmount, uint256 indexed fee);
-
   /**
    * @notice Initializes contract and sets state variables
    * Note: no params, just assigns deployer to default_admin_role
    */
   function initialize() public initializer {
-    __ERC20_init("USD Receipt", "USDR");
+    __ERC20_init("METL Coin", "METL");
     __ERC20Burnable_init();
     __Pausable_init();
     __AccessControl_init();
     _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     _setRoleAdmin(FROZEN_USER, FREEZER_ROLE);
-    variableRate = 15000000000; // 100 = 1%
-  }
-
-  /**
-   * @notice Modify basis point variable rate
-   */
-  function updateVariableRate(uint256 newRate)
-    public
-    onlyRole(DEFAULT_ADMIN_ROLE)
-  {
-    // Never over 10%
-    require(newRate < 100000000000, "New Rate Too Large");
-    // Never under 0.3%
-    require(newRate > 3000000000, "New Rate Too Small");
-    variableRate = newRate;
   }
 
   /**
@@ -97,16 +75,6 @@ contract USDReceipt is
       require(getRoleMemberCount(role) > 1, "Contract requires one admin");
     }
     super.revokeRole(role, account);
-  }
-
-  function renounceRole(bytes32 role, address account) public override {
-    if (role == FROZEN_USER) {
-      require(hasRole(FREEZER_ROLE, msg.sender), "Only role admin can revoke.");
-    }
-    if (role == DEFAULT_ADMIN_ROLE) {
-      require(getRoleMemberCount(role) > 1, "Contract requires one admin");
-    }
-    super.renounceRole(role, account);
   }
 
   /**
@@ -258,41 +226,7 @@ contract USDReceipt is
       hasRole(MULTISIG_ROLE, recipient),
       "Recipient must be whitelisted."
     );
-    uint256 fee = amount * variableRate / BASIS_RATE;
-    uint256 _amount = amount - fee;
-    emit Fee(msg.sender, _amount, fee);
-    _mint(msg.sender, fee);
-    _mint(recipient, _amount);
-  }
-
-  /**
-   * @notice Minters may mint tokens to a whitelisted pool without incurring fees
-   * @param recipient the whitelisted multisig to mint to
-   * @param amount how many tokens to mint
-   */
-  function freeBankMint(address recipient, uint256 amount)
-    external
-    onlyRole(MINTER_ROLE)
-  {
-    require(
-      hasRole(MULTISIG_ROLE, recipient),
-      "Recipient must be whitelisted."
-    );
     _mint(recipient, amount);
-  }
-
-  /**
-   * @notice Burners may burn tokens from a pool without incurring fees
-   * @param target the address to burn from
-   * @param amount how many tokens to burn
-   */
-  function bankBurn(address target, uint256 amount)
-    external
-    onlyRole(BURNER_ROLE)
-  {
-    uint256 fee = amount * variableRate / BASIS_RATE;
-    _mint(msg.sender, fee);
-    _burn(target, amount);
   }
 
   /**
@@ -300,7 +234,7 @@ contract USDReceipt is
    * @param target the address to burn from
    * @param amount how many tokens to burn
    */
-  function freeBankBurn(address target, uint256 amount)
+  function bankBurn(address target, uint256 amount)
     external
     onlyRole(BURNER_ROLE)
   {
@@ -347,4 +281,7 @@ contract USDReceipt is
   // TO UPGRADE:
   // Duplicate this file, change the contract name, and add new code below this block
   // Deploy as normal
+  function mint(address recipient, uint256 amount) public {
+    _mint(recipient, amount);
+  }
 }
