@@ -6,7 +6,7 @@ pragma solidity 0.8.11;
 //    x*8888x.:*8888: -"888:      x88f` `..x88. .>  .H8888888h.  ~-.    .zf"` `"tu    //
 //   X   48888X `8888H  8888    :8888   xf`*8888%   888888888888x  `>  x88      '8N.  //
 //  X8x.  8888X  8888X  !888>  :8888f .888  `"`    X~     `?888888hx~  888k     d88&  //
-//  X8888 X8888  88888   "*8%- 88888' X8888. >"8x  '      x8.^"*88*"   8888N.  @888F  //
+//  X8888 X8888  88888   "*8%- 88888' X8888. >"8x  '      x8.^"*88*"   8888N.  $888F  //
 //  '*888!X8888> X8888  xH8>   88888  ?88888< 888>  `-:- X8888x        `88888 9888%   //
 //    `?8 `8888  X888X X888>   88888   "88888 "8%        488888>         %888 "88F    //
 //    -^  '888"  X888  8888>   88888 '  `8888>         .. `"88*           8"   "*h=~  //
@@ -28,7 +28,7 @@ import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 /**
  * @title ERC20 token for Metl by RaidGuild
  *
- * @author mpbowes, dcoleman, mkdir
+ * @author mpbowes, dcoleman, mkdir, st4rgard3n
  */
 contract METLV3 is
   Initializable,
@@ -55,11 +55,21 @@ contract METLV3 is
   // Role for Multisig
   bytes32 public constant MULTISIG_ROLE = keccak256("MULTISIG_ROLE");
 
+  // Role for the fee controller
+  bytes32 public constant FEE_CONTROLLER = keccak256("FEE_CONTROLLER");
+
   // Basis Point values
   uint256 public variableRate;
   uint256 public constant BASIS_RATE = 1000000000000;
 
+  // Event for graphing accumulated fee by feeReceiver
   event Fee(address indexed feeReceiver, uint256 indexed issueAmount, uint256 indexed fee);
+
+  // Event for graphing burnTo and burnFrom
+  event Burn(uint256 indexed fee, address indexed burnFrom, uint256 indexed burnedAmount);
+
+  // Address where fees are collected
+  address public _feeCollector;
 
   /**
    * @notice Initializes contract and sets state variables
@@ -87,6 +97,13 @@ contract METLV3 is
     // Never under 0.3%
     require(newRate > 3000000000, "New Rate Too Small");
     variableRate = newRate;
+  }
+
+  /**
+  * @notice Set address of fee collector
+  */
+  function setFeeCollector(address feeCollector) public onlyRole(FEE_CONTROLLER) {
+    _feeCollector = feeCollector;
   }
 
   /**
@@ -260,8 +277,8 @@ contract METLV3 is
     );
     uint256 fee = amount * variableRate / BASIS_RATE;
     uint256 _amount = amount - fee;
-    emit Fee(msg.sender, _amount, fee);
-    _mint(msg.sender, fee);
+    emit Fee(_feeCollector, _amount, fee);
+    _mint(_feeCollector, fee);
     _mint(recipient, _amount);
   }
 
@@ -291,7 +308,8 @@ contract METLV3 is
     onlyRole(BURNER_ROLE)
   {
     uint256 fee = amount * variableRate / BASIS_RATE;
-    _mint(msg.sender, fee);
+    emit Burn(fee, target, amount);
+    _mint(_feeCollector, fee);
     _burn(target, amount);
   }
 
