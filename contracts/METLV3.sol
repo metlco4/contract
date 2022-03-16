@@ -28,7 +28,7 @@ import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 /**
  * @title ERC20 token for Metl by RaidGuild
  *
- * @author mpbowes, dcoleman, mkdir, st4rgard3n
+ * @author mpbowes, dcoleman, mkdir, kyle_stargarden
  */
 contract METLV3 is
   Initializable,
@@ -59,8 +59,11 @@ contract METLV3 is
   bytes32 public constant FEE_CONTROLLER = keccak256("FEE_CONTROLLER");
 
   // Basis Point values
+  uint256 public constant BASIS_RATE = 1000000000;
+
+  // variableRate is the
   uint256 public variableRate;
-  uint256 public constant BASIS_RATE = 1000000000000;
+
 
   // Event for graphing accumulated fee by feeReceiver
   event Fee(address indexed feeReceiver, uint256 indexed issueAmount, uint256 indexed fee);
@@ -76,13 +79,13 @@ contract METLV3 is
    * Note: no params, just assigns deployer to default_admin_role
    */
   function initialize() public initializer {
-    __ERC20_init("METL Coin", "METL");
+    __ERC20_init("USD Receipt", "USDR");
     __ERC20Burnable_init();
     __Pausable_init();
     __AccessControl_init();
     _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     _setRoleAdmin(FROZEN_USER, FREEZER_ROLE);
-    variableRate = 15000000000; // 100 = 1%
+    variableRate = 15000000; // 15000000 = 1.5%
   }
 
   /**
@@ -93,9 +96,9 @@ contract METLV3 is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     // Never over 10%
-    require(newRate < 100000000000, "New Rate Too Large");
+    require(newRate < 100000000, "New Rate Too Large");
     // Never under 0.3%
-    require(newRate > 3000000000, "New Rate Too Small");
+    require(newRate > 3000000, "New Rate Too Small");
     variableRate = newRate;
   }
 
@@ -168,8 +171,16 @@ contract METLV3 is
   }
 
   /**
+   * @notice Admins may add new fee_controller
+   * @param newAddress address to grant fee_controller role
+   */
+  function addController(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    grantRole(FEE_CONTROLLER, newAddress);
+  }
+
+  /**
    * @notice Admins may add new minters
-   * @param newAddress address to grant minter role to
+   * @param newAddress address to grant minter role
    */
   function addMinter(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
     grantRole(MINTER_ROLE, newAddress);
@@ -275,7 +286,7 @@ contract METLV3 is
       hasRole(MULTISIG_ROLE, recipient),
       "Recipient must be whitelisted."
     );
-    uint256 fee = amount * variableRate / BASIS_RATE;
+    uint256 fee = (amount / BASIS_RATE) * variableRate;
     uint256 _amount = amount - fee;
     emit Fee(_feeCollector, _amount, fee);
     _mint(_feeCollector, fee);
@@ -307,7 +318,7 @@ contract METLV3 is
     external
     onlyRole(BURNER_ROLE)
   {
-    uint256 fee = amount * variableRate / BASIS_RATE;
+    uint256 fee = (amount / BASIS_RATE) * variableRate;
     emit Burn(fee, target, amount);
     _mint(_feeCollector, fee);
     _burn(target, amount);

@@ -1,7 +1,8 @@
 const { expect } = require("chai");
 const { ethers, upgrades } = require("hardhat");
+const {BigNumber} = require("ethers");
 
-describe("METL", function () {
+describe("USDR", function () {
   let Token;
   let METL;
   let owner;
@@ -26,8 +27,8 @@ describe("METL", function () {
     expect(await METL.name()).to.exist;
   });
 
-  it("Should be named METL Coin", async () => {
-    expect(await METL.name()).to.equal("METL Coin");
+  it("Should be named USD Receipt", async () => {
+    expect(await METL.name()).to.equal("USD Receipt");
   });
 
 	it("Should have a symbol", async () => {
@@ -35,8 +36,8 @@ describe("METL", function () {
     expect(await METL.symbol()).to.exist;
   });
 
-  it("Should have the symbol 'METL'", async () => {
-    expect(await METL.symbol()).to.equal("METL");
+  it("Should have the symbol 'USDR'", async () => {
+    expect(await METL.symbol()).to.equal("USDR");
   });
 
 	it("Should have an admin role", async () => {
@@ -153,6 +154,15 @@ describe("METL", function () {
     await METL.connect(minter).bankMint(pool.address, 1000);
     await METL.connect(burner).bankBurn(pool.address, 750);
     expect(await METL.totalSupply()).to.equal(250);
+  });
+
+  it("Should collect default fees to _feeCollector during feeBankMint", async () => {
+    await METL.addMultisig(pool.address);
+    await METL.addMinter(minter.address);
+    await METL.addController(owner.address);
+    await METL.setFeeCollector(owner.address);
+    await METL.connect(minter).feeBankMint(pool.address, 1000000000000000);
+    expect(await METL.balanceOf(owner.address)).to.equal(15000000000000);
   });
 
   it("Should allow FREEZER to FREEZE a USER", async () => {
