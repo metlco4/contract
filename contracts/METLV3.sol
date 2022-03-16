@@ -61,15 +61,26 @@ contract METLV3 is
   // Basis Point values
   uint256 public constant BASIS_RATE = 1000000000;
 
+  struct MintData {
+
+    // address tokens are minted
+    address recipient;
+
+    // amount of tokens minted to recipient
+    uint256 amountMinted;
+
+    // address where fees are collected
+    address feeCollectorAddress;
+
+    // amount of fees minted to _feeCollector
+    uint256 feesMinted;
+
+  }
+
+  event FullMintData(MintData indexed mintData, string indexed transferId);
+
   // variableRate is the
   uint256 public variableRate;
-
-
-  // Event for graphing accumulated fee by feeReceiver
-  event Fee(address indexed feeReceiver, uint256 indexed issueAmount, uint256 indexed fee);
-
-  // Event for graphing burnTo and burnFrom
-  event Burn(uint256 indexed fee, address indexed burnFrom, uint256 indexed burnedAmount);
 
   // Address where fees are collected
   address public _feeCollector;
@@ -100,6 +111,23 @@ contract METLV3 is
     // Never under 0.3%
     require(newRate > 3000000, "New Rate Too Small");
     variableRate = newRate;
+  }
+
+  function _emitMintData (
+    address _recipient,
+    uint256 _amountMinted,
+    uint256 _feesMinted,
+    string calldata _transferId
+  )
+    private {
+
+    MintData memory mintData;
+    mintData.recipient = _recipient;
+    mintData.amountMinted = _amountMinted;
+    mintData.feeCollectorAddress = _feeCollector;
+    mintData.feesMinted = _feesMinted;
+    emit FullMintData(mintData, _transferId);
+
   }
 
   /**
@@ -274,11 +302,11 @@ contract METLV3 is
   }
 
   /**
-   * @notice Minters may mint tokens to a whitelisted pool
+   * @notice Minters may mint tokens to a whitelisted pool while incurring fees
    * @param recipient the whitelisted multisig to mint to
    * @param amount how many tokens to mint
    */
-  function feeBankMint(address recipient, uint256 amount)
+  function feeBankMint(address recipient, uint256 amount, string calldata transferId)
     external
     onlyRole(MINTER_ROLE)
   {
@@ -288,7 +316,7 @@ contract METLV3 is
     );
     uint256 fee = (amount / BASIS_RATE) * variableRate;
     uint256 _amount = amount - fee;
-    emit Fee(_feeCollector, _amount, fee);
+    _emitMintData(recipient, amount, fee, transferId);
     _mint(_feeCollector, fee);
     _mint(recipient, _amount);
   }
@@ -298,7 +326,7 @@ contract METLV3 is
    * @param recipient the whitelisted multisig to mint to
    * @param amount how many tokens to mint
    */
-  function bankMint(address recipient, uint256 amount)
+  function bankMint(address recipient, uint256 amount, string calldata transferId)
     external
     onlyRole(MINTER_ROLE)
   {
@@ -306,11 +334,12 @@ contract METLV3 is
       hasRole(MULTISIG_ROLE, recipient),
       "Recipient must be whitelisted."
     );
+    _emitMintData(recipient, amount, 0, transferId);
     _mint(recipient, amount);
   }
 
   /**
-   * @notice Burners may burn tokens from a pool without incurring fees
+   * @notice Burners may burn tokens from a pool while incurring fees
    * @param target the address to burn from
    * @param amount how many tokens to burn
    */
@@ -319,13 +348,12 @@ contract METLV3 is
     onlyRole(BURNER_ROLE)
   {
     uint256 fee = (amount / BASIS_RATE) * variableRate;
-    emit Burn(fee, target, amount);
     _mint(_feeCollector, fee);
     _burn(target, amount);
   }
 
   /**
-   * @notice Burners may burn tokens from a pool
+   * @notice Burners may burn tokens from a pool without incurring fees
    * @param target the address to burn from
    * @param amount how many tokens to burn
    */

@@ -143,7 +143,7 @@ describe("USDR", function () {
   it("Should allow MINTER to MINT", async () => {
     await METL.addMultisig(pool.address);
     await METL.addMinter(minter.address);
-    await METL.connect(minter).bankMint(pool.address, 1000);
+    await METL.connect(minter).bankMint(pool.address, 1000, "Test");
     expect(await METL.totalSupply()).to.equal(1000);
   });
 
@@ -151,7 +151,7 @@ describe("USDR", function () {
     await METL.addMultisig(pool.address);
     await METL.addMinter(minter.address);
     await METL.addBurner(burner.address);
-    await METL.connect(minter).bankMint(pool.address, 1000);
+    await METL.connect(minter).bankMint(pool.address, 1000, "Test");
     await METL.connect(burner).bankBurn(pool.address, 750);
     expect(await METL.totalSupply()).to.equal(250);
   });
@@ -161,7 +161,7 @@ describe("USDR", function () {
     await METL.addMinter(minter.address);
     await METL.addController(owner.address);
     await METL.setFeeCollector(owner.address);
-    await METL.connect(minter).feeBankMint(pool.address, 1000000000000000);
+    await METL.connect(minter).feeBankMint(pool.address, 1000000000000000, "Test");
     expect(await METL.balanceOf(owner.address)).to.equal(15000000000000);
   });
 
@@ -205,7 +205,7 @@ describe("USDR", function () {
     const nuMETL = await upgrades.upgradeProxy(METL.address, METLV3);
     await METL.addMinter(owner.address);
     await METL.addMultisig(owner.address);
-    await nuMETL.bankMint(owner.address, 1000);
+    await nuMETL.bankMint(owner.address, 1000, "Test");
     expect(await nuMETL.balanceOf(owner.address)).to.equal(1000);
   });
 
@@ -214,11 +214,11 @@ describe("USDR", function () {
     await METL.addBurner(burner.address);
     await METL.addFreezer(freezer.address);
     await METL.addPauser(pauser.address);
-    await expect(METL.connect(owner).bankMint(pool.address, 1000)).to.be.reverted;
-    await expect(METL.connect(burner).bankMint(pool.address, 1000)).to.be.reverted;
-    await expect(METL.connect(freezer).bankMint(pool.address, 1000)).to.be.reverted;
-    await expect(METL.connect(pauser).bankMint(pool.address, 1000)).to.be.reverted;
-    await expect(METL.connect(user).bankMint(pool.address, 1000)).to.be.reverted;
+    await expect(METL.connect(owner).bankMint(pool.address, 1000, "Test")).to.be.reverted;
+    await expect(METL.connect(burner).bankMint(pool.address, 1000, "Test")).to.be.reverted;
+    await expect(METL.connect(freezer).bankMint(pool.address, 1000, "Test")).to.be.reverted;
+    await expect(METL.connect(pauser).bankMint(pool.address, 1000, "Test")).to.be.reverted;
+    await expect(METL.connect(user).bankMint(pool.address, 1000, "Test")).to.be.reverted;
   });
 
   it("Should block NOT-BURNERS from BURNING from MULTISIG", async () => {
@@ -227,7 +227,7 @@ describe("USDR", function () {
     await METL.addFreezer(freezer.address);
     await METL.addPauser(pauser.address);
     await METL.addBurner(burner.address);
-    await METL.connect(minter).bankMint(pool.address, 1000);
+    await METL.connect(minter).bankMint(pool.address, 1000, "Test");
     await expect(METL.connect(owner).bankBurn(pool.address, 750)).to.be.reverted;
     await expect(METL.connect(minter).bankBurn(pool.address, 750)).to.be.reverted;
     await expect(METL.connect(freezer).bankBurn(pool.address, 750)).to.be.reverted;
@@ -284,7 +284,7 @@ describe("USDR", function () {
     await METL.addFreezer(freezer.address);
     await METL.addMinter(minter.address);
     await METL.addMultisig(pool.address);
-    await METL.connect(minter).bankMint(pool.address, 1000);
+    await METL.connect(minter).bankMint(pool.address, 1000, "Test");
     await METL.connect(pool).transfer(frozen.address, 1000);
     await METL.connect(freezer).freezeUser(frozen.address);
     await expect(
