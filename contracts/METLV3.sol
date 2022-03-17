@@ -61,23 +61,9 @@ contract METLV3 is
   // Basis Point values
   uint256 public constant BASIS_RATE = 1000000000;
 
-  struct MintData {
+  event ReceivedMint(address indexed receipient, uint256 indexed amount, string indexed transferId);
 
-    // address tokens are minted
-    address recipient;
-
-    // amount of tokens minted to recipient
-    uint256 amountMinted;
-
-    // address where fees are collected
-    address feeCollectorAddress;
-
-    // amount of fees minted to _feeCollector
-    uint256 feesMinted;
-
-  }
-
-  event FullMintData(MintData indexed mintData, string indexed transferId);
+  event MintFees(address indexed feeCollector, uint256 indexed fee);
 
   // variableRate is the
   uint256 public variableRate;
@@ -111,23 +97,6 @@ contract METLV3 is
     // Never under 0.3%
     require(newRate > 3000000, "New Rate Too Small");
     variableRate = newRate;
-  }
-
-  function _emitMintData (
-    address _recipient,
-    uint256 _amountMinted,
-    uint256 _feesMinted,
-    string calldata _transferId
-  )
-    private {
-
-    MintData memory mintData;
-    mintData.recipient = _recipient;
-    mintData.amountMinted = _amountMinted;
-    mintData.feeCollectorAddress = _feeCollector;
-    mintData.feesMinted = _feesMinted;
-    emit FullMintData(mintData, _transferId);
-
   }
 
   /**
@@ -316,7 +285,8 @@ contract METLV3 is
     );
     uint256 fee = (amount / BASIS_RATE) * variableRate;
     uint256 _amount = amount - fee;
-    _emitMintData(recipient, amount, fee, transferId);
+    emit ReceivedMint(recipient, amount, transferId);
+    emit MintFees(_feeCollector, fee);
     _mint(_feeCollector, fee);
     _mint(recipient, _amount);
   }
@@ -334,7 +304,7 @@ contract METLV3 is
       hasRole(MULTISIG_ROLE, recipient),
       "Recipient must be whitelisted."
     );
-    _emitMintData(recipient, amount, 0, transferId);
+    emit ReceivedMint(recipient, amount, transferId);
     _mint(recipient, amount);
   }
 
