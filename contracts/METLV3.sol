@@ -61,7 +61,7 @@ contract METLV3 is
   // Basis Point values
   uint256 public constant BASIS_RATE = 1000000000;
 
-  event ReceivedMint(address indexed receipient, uint256 indexed amount, string indexed transferId);
+  event ReceivedMint(address indexed receipient, uint256 indexed amount, bytes32 indexed bytesId, string transferId);
 
   event MintFees(address indexed feeCollector, uint256 indexed fee);
 
@@ -97,6 +97,13 @@ contract METLV3 is
     // Never under 0.3%
     require(newRate > 3000000, "New Rate Too Small");
     variableRate = newRate;
+  }
+
+  /**
+  * @notice Return the keccak256 hash of a string
+  */
+  function toBytes32(string calldata transferId) public pure returns(bytes32 hash) {
+    return keccak256(abi.encodePacked(transferId));
   }
 
   /**
@@ -285,7 +292,8 @@ contract METLV3 is
     );
     uint256 fee = (amount / BASIS_RATE) * variableRate;
     uint256 _amount = amount - fee;
-    emit ReceivedMint(recipient, _amount, transferId);
+    bytes32 bytesId = keccak256(abi.encodePacked(transferId));
+    emit ReceivedMint(recipient, _amount, bytesId, transferId);
     emit MintFees(_feeCollector, fee);
     _mint(_feeCollector, fee);
     _mint(recipient, _amount);
@@ -304,7 +312,8 @@ contract METLV3 is
       hasRole(MULTISIG_ROLE, recipient),
       "Recipient must be whitelisted."
     );
-    emit ReceivedMint(recipient, amount, transferId);
+    bytes32 bytesId = keccak256(abi.encodePacked(transferId));
+    emit ReceivedMint(recipient, amount, bytesId, transferId);
     _mint(recipient, amount);
   }
 
