@@ -285,7 +285,7 @@ contract METLV3 is
     );
     uint256 fee = (amount / BASIS_RATE) * variableRate;
     uint256 _amount = amount - fee;
-    emit ReceivedMint(recipient, amount, transferId);
+    emit ReceivedMint(recipient, _amount, transferId);
     emit MintFees(_feeCollector, fee);
     _mint(_feeCollector, fee);
     _mint(recipient, _amount);
