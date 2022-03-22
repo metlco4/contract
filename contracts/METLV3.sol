@@ -17,7 +17,6 @@ pragma solidity 0.8.11;
 //                                                                                    //
 ////////////////////////////////////////////////////////////////////////////////////////
 
-import "hardhat/console.sol";
 import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20BurnableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
@@ -52,8 +51,8 @@ contract METLV3 is
   // Role for pausers
   bytes32 public constant PAUSER_ROLE = keccak256("PAUSER_ROLE");
 
-  // Role for Multisig
-  bytes32 public constant MULTISIG_ROLE = keccak256("MULTISIG_ROLE");
+  // Role for whitelisted users
+  bytes32 public constant WHITELIST_USER = keccak256("WHITELIST_USER");
 
   // Role for the fee controller
   bytes32 public constant FEE_CONTROLLER = keccak256("FEE_CONTROLLER");
@@ -63,7 +62,7 @@ contract METLV3 is
 
   event ReceivedMint(address indexed receipient, uint256 indexed amount, bytes32 indexed bytesId, string transferId);
 
-  event MintFees(address indexed feeCollector, uint256 indexed fee);
+  event MintFee(address indexed feeCollector, uint256 indexed fee);
 
   // variableRate is the
   uint256 public variableRate;
@@ -90,11 +89,11 @@ contract METLV3 is
    */
   function updateVariableRate(uint256 newRate)
     public
-    onlyRole(DEFAULT_ADMIN_ROLE)
+    onlyRole(FEE_CONTROLLER)
   {
-    // Never over 10%
+    // Variable fee is never over 10%
     require(newRate < 100000000, "New Rate Too Large");
-    // Never under 0.3%
+    // Variable fee is never under 0.3%
     require(newRate > 3000000, "New Rate Too Small");
     variableRate = newRate;
   }
@@ -153,14 +152,14 @@ contract METLV3 is
   }
 
   /**
-   * @notice Whitelists a bank multisig address
-   * @param newAddress address of multisig to add
+   * @notice Whitelists a whitelisted user address
+   * @param newAddress address of user to add
    */
-  function addMultisig(address newAddress)
+  function addWhitelist(address newAddress)
     external
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
-    grantRole(MULTISIG_ROLE, newAddress);
+    grantRole(WHITELIST_USER, newAddress);
   }
 
   /**
@@ -171,7 +170,7 @@ contract METLV3 is
     external
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
-    revokeRole(MULTISIG_ROLE, oldAddress);
+    revokeRole(WHITELIST_USER, oldAddress);
   }
 
   /**
@@ -278,8 +277,8 @@ contract METLV3 is
   }
 
   /**
-   * @notice Minters may mint tokens to a whitelisted pool while incurring fees
-   * @param recipient the whitelisted multisig to mint to
+   * @notice Minters may mint tokens to a whitelisted user while incurring fees
+   * @param recipient the whitelisted user to mint to
    * @param amount how many tokens to mint
    */
   function feeBankMint(address recipient, uint256 amount, string calldata transferId)
@@ -287,21 +286,21 @@ contract METLV3 is
     onlyRole(MINTER_ROLE)
   {
     require(
-      hasRole(MULTISIG_ROLE, recipient),
+      hasRole(WHITELIST_USER, recipient),
       "Recipient must be whitelisted."
     );
     uint256 fee = (amount / BASIS_RATE) * variableRate;
     uint256 _amount = amount - fee;
     bytes32 bytesId = keccak256(abi.encodePacked(transferId));
     emit ReceivedMint(recipient, _amount, bytesId, transferId);
-    emit MintFees(_feeCollector, fee);
+    emit MintFee(_feeCollector, fee);
     _mint(_feeCollector, fee);
     _mint(recipient, _amount);
   }
 
   /**
-   * @notice Minters may mint tokens to a whitelisted pool without incurring fees
-   * @param recipient the whitelisted multisig to mint to
+   * @notice Minters may mint tokens to a whitelisted user without incurring fees
+   * @param recipient the whitelisted user to mint to
    * @param amount how many tokens to mint
    */
   function bankMint(address recipient, uint256 amount, string calldata transferId)
@@ -309,7 +308,7 @@ contract METLV3 is
     onlyRole(MINTER_ROLE)
   {
     require(
-      hasRole(MULTISIG_ROLE, recipient),
+      hasRole(WHITELIST_USER, recipient),
       "Recipient must be whitelisted."
     );
     bytes32 bytesId = keccak256(abi.encodePacked(transferId));

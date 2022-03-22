@@ -56,8 +56,8 @@ describe("USDR", function () {
   // });
 
   it("Should allow the owner to change the pool address", async () => {
-		await METL.addMultisig(pool.address);
-		const MS = await METL.MULTISIG_ROLE();
+		await METL.addWhitelist(pool.address);
+		const MS = await METL.WHITELIST_USER();
     expect(await METL.getRoleMember(MS, 0)).to.equal(pool.address);
   });
 	it("Should have a 'MINTER' role", async () => {
@@ -141,14 +141,14 @@ describe("USDR", function () {
 	})
 
   it("Should allow MINTER to MINT", async () => {
-    await METL.addMultisig(pool.address);
+    await METL.addWhitelist(pool.address);
     await METL.addMinter(minter.address);
     await METL.connect(minter).bankMint(pool.address, 1000, "Test");
     expect(await METL.totalSupply()).to.equal(1000);
   });
 
   it("Should allow BURNER to BURN from POOL", async () => {
-    await METL.addMultisig(pool.address);
+    await METL.addWhitelist(pool.address);
     await METL.addMinter(minter.address);
     await METL.addBurner(burner.address);
     await METL.connect(minter).bankMint(pool.address, 1000, "Test");
@@ -157,7 +157,7 @@ describe("USDR", function () {
   });
 
   it("Should collect default fees to _feeCollector during feeBankMint", async () => {
-    await METL.addMultisig(pool.address);
+    await METL.addWhitelist(pool.address);
     await METL.addMinter(minter.address);
     await METL.addController(owner.address);
     await METL.setFeeCollector(owner.address);
@@ -204,13 +204,13 @@ describe("USDR", function () {
     const METLV3 = await ethers.getContractFactory("METLV3");
     const nuMETL = await upgrades.upgradeProxy(METL.address, METLV3);
     await METL.addMinter(owner.address);
-    await METL.addMultisig(owner.address);
+    await METL.addWhitelist(owner.address);
     await nuMETL.bankMint(owner.address, 1000, "Test");
     expect(await nuMETL.balanceOf(owner.address)).to.equal(1000);
   });
 
   it("Should block NOT-MINTERS from MINTING to MULTISIG", async () => {
-    await METL.addMultisig(pool.address);
+    await METL.addWhitelist(pool.address);
     await METL.addBurner(burner.address);
     await METL.addFreezer(freezer.address);
     await METL.addPauser(pauser.address);
@@ -222,7 +222,7 @@ describe("USDR", function () {
   });
 
   it("Should block NOT-BURNERS from BURNING from MULTISIG", async () => {
-    await METL.addMultisig(pool.address);
+    await METL.addWhitelist(pool.address);
     await METL.addMinter(minter.address);
     await METL.addFreezer(freezer.address);
     await METL.addPauser(pauser.address);
@@ -283,7 +283,7 @@ describe("USDR", function () {
   it("Should block FROZEN_USERS from RECEIVING", async () => {
     await METL.addFreezer(freezer.address);
     await METL.addMinter(minter.address);
-    await METL.addMultisig(pool.address);
+    await METL.addWhitelist(pool.address);
     await METL.connect(minter).bankMint(pool.address, 1000, "Test");
     await METL.connect(pool).transfer(frozen.address, 1000);
     await METL.connect(freezer).freezeUser(frozen.address);
