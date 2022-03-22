@@ -163,10 +163,10 @@ contract METLV3 is
   }
 
   /**
-   * @notice Whitelists a bank multisig address
-   * @param oldAddress address of multisig to add
+   * @notice Removes a user's whitelist address
+   * @param oldAddress address of whitelist to add
    */
-  function revokeMultisig(address oldAddress)
+  function revokeWhitelist(address oldAddress)
     external
     onlyRole(DEFAULT_ADMIN_ROLE)
   {

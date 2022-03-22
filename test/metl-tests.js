@@ -209,7 +209,7 @@ describe("USDR", function () {
     expect(await nuMETL.balanceOf(owner.address)).to.equal(1000);
   });
 
-  it("Should block NOT-MINTERS from MINTING to MULTISIG", async () => {
+  it("Should block NOT-MINTERS from MINTING to WHITELIST", async () => {
     await METL.addWhitelist(pool.address);
     await METL.addBurner(burner.address);
     await METL.addFreezer(freezer.address);
@@ -221,7 +221,7 @@ describe("USDR", function () {
     await expect(METL.connect(user).bankMint(pool.address, 1000, "Test")).to.be.reverted;
   });
 
-  it("Should block NOT-BURNERS from BURNING from MULTISIG", async () => {
+  it("Should block NOT-BURNERS from BURNING from WHITELIST", async () => {
     await METL.addWhitelist(pool.address);
     await METL.addMinter(minter.address);
     await METL.addFreezer(freezer.address);
