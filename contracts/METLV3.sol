@@ -87,10 +87,14 @@ contract METLV3 is
   /**
    * @notice Modify basis point variable rate
    */
+  // @AUDIT: make external
   function updateVariableRate(uint256 newRate)
     public
     onlyRole(FEE_CONTROLLER)
   {
+    // @AUDIT: suggestion - define a minimum basis point percent
+    // This will work in line with the suggestion within `feeBaseMint()`
+    // ie: `require(newRate % 1000000 == 0, "Cannot round down less than .1%")`
     // Variable fee is never over 10%
     require(newRate < 100000000, "New Rate Too Large");
     // Variable fee is never under 0.3%
@@ -108,6 +112,7 @@ contract METLV3 is
   /**
   * @notice Set address of fee collector
   */
+  // @AUDIT: make external
   function setFeeCollector(address feeCollector) public onlyRole(FEE_CONTROLLER) {
     _feeCollector = feeCollector;
   }
@@ -185,7 +190,7 @@ contract METLV3 is
    * @notice Admins may add new minters
    * @param newAddress address to grant minter role
    */
-  function addMinter(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
+  function addMinter(address newAddress) external {
     grantRole(MINTER_ROLE, newAddress);
   }
 
@@ -214,7 +219,6 @@ contract METLV3 is
    */
   function removeBurner(address oldAddress)
     external
-    onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(BURNER_ROLE, oldAddress);
   }
@@ -289,6 +293,7 @@ contract METLV3 is
       hasRole(WHITELIST_USER, recipient),
       "Recipient must be whitelisted."
     );
+    // @AUDIT: suggestion - add `require(amount % BASIS_RATE == 0)`
     uint256 fee = (amount / BASIS_RATE) * variableRate;
     uint256 _amount = amount - fee;
     bytes32 bytesId = keccak256(abi.encodePacked(transferId));
@@ -325,6 +330,7 @@ contract METLV3 is
     external
     onlyRole(BURNER_ROLE)
   {
+    // @AUDIT: suggestion - add `require(amount % BASIS_RATE == 0)`
     uint256 fee = (amount / BASIS_RATE) * variableRate;
     _mint(_feeCollector, fee);
     _burn(target, amount);
@@ -361,6 +367,7 @@ contract METLV3 is
   /**
    * @notice Pausers may pause the network
    */
+  // @AUDIT: make external
   function pause() public onlyRole(PAUSER_ROLE) {
     _pause();
   }
@@ -368,6 +375,7 @@ contract METLV3 is
   /**
    * @notice Pausers may unpause the network
    */
+  // @AUDIT: make external
   function unpause() public onlyRole(PAUSER_ROLE) {
     _unpause();
   }
