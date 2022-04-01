@@ -93,8 +93,7 @@ contract METLV3 is
     onlyRole(FEE_CONTROLLER)
   {
     // @AUDIT: suggestion - define a minimum basis point percent
-    // This will work in line with the suggestion within `feeBaseMint()`
-    // ie: `require(newRate % 1000000 == 0, "Cannot round down less than .1%")`
+    // ie: `require(newRate % 1000000 == 0, "Rate cannot round down less than .1%")`
     // Variable fee is never over 10%
     require(newRate < 100000000, "New Rate Too Large");
     // Variable fee is never under 0.3%
