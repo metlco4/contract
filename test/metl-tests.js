@@ -64,9 +64,17 @@ describe("USDR", function () {
 		 // eslint-disable-next-line no-unused-expressions
     expect(await METL.MINTER_ROLE()).to.exist;
   });
+    it("Should have a 'FREE_MINTER' role", async () => {
+		 // eslint-disable-next-line no-unused-expressions
+    expect(await METL.FREE_MINTER()).to.exist;
+  });
 	it("Should have a 'BURNER' role", async () => {
 		 // eslint-disable-next-line no-unused-expressions
     expect(await METL.BURNER_ROLE()).to.exist;
+  });
+    it("Should have a 'FREE_BURNER' role", async () => {
+		 // eslint-disable-next-line no-unused-expressions
+    expect(await METL.FREE_BURNER()).to.exist;
   });
 	it("Should have a 'FREEZER' role", async () => {
 		 // eslint-disable-next-line no-unused-expressions
@@ -82,8 +90,14 @@ describe("USDR", function () {
   });
 
   it("Should allow ADMIN to add to MINTER_ROLE", async () => {
-    const MR = await METL.MINTER_ROLE();
+    const FMR = await METL.MINTER_ROLE();
     await METL.addMinter(minter.address);
+    expect(await METL.getRoleMember(FMR, 0)).to.equal(minter.address);
+  });
+
+  it("Should allow ADMIN to add to FREE_MINTER", async () => {
+    const MR = await METL.FREE_MINTER();
+    await METL.addFreeMinter(minter.address);
     expect(await METL.getRoleMember(MR, 0)).to.equal(minter.address);
   });
 
@@ -91,6 +105,12 @@ describe("USDR", function () {
     const BR = await METL.BURNER_ROLE();
     await METL.addBurner(burner.address);
     expect(await METL.getRoleMember(BR, 0)).to.equal(burner.address);
+  });
+
+  it("Should allow ADMIN to add to FREE_BURNER", async () => {
+    const FBR = await METL.FREE_BURNER();
+    await METL.addFreeBurner(burner.address);
+    expect(await METL.getRoleMember(FBR, 0)).to.equal(burner.address);
   });
 
   it("Should allow ADMIN to add to FREEZER_ROLE", async () => {
@@ -113,11 +133,26 @@ describe("USDR", function () {
     expect(await METL.getRoleMemberCount(MR)).to.equal(0);
   });
 
+  it("Should allow ADMIN to remove from FREE_MINTER", async () => {
+    const FMR = await METL.FREE_MINTER();
+    await METL.addFreeMinter(minter.address);
+    expect(await METL.getRoleMemberCount(FMR)).to.equal(1);
+    await METL.removeFreeMinter(minter.address);
+    expect(await METL.getRoleMemberCount(FMR)).to.equal(0);
+  });
+
   it("Should allow ADMIN to remove from BURNER_ROLE", async () => {
     const BR = await METL.BURNER_ROLE();
     await METL.addBurner(burner.address);
     await METL.removeBurner(burner.address);
     expect(await METL.getRoleMemberCount(BR)).to.equal(0);
+  });
+
+  it("Should allow ADMIN to remove from FREE_BURNER", async () => {
+    const FBR = await METL.FREE_BURNER();
+    await METL.addFreeBurner(burner.address);
+    await METL.removeFreeBurner(burner.address);
+    expect(await METL.getRoleMemberCount(FBR)).to.equal(0);
   });
 
   it("Should allow ADMIN to remove from FREEZER_ROLE", async () => {
@@ -142,18 +177,34 @@ describe("USDR", function () {
 
   it("Should allow MINTER to MINT", async () => {
     await METL.addWhitelist(pool.address);
-    await METL.addMinter(minter.address);
+    await METL.addFreeMinter(minter.address);
     await METL.connect(minter).bankMint(pool.address, 1000, "Test");
     expect(await METL.totalSupply()).to.equal(1000);
   });
 
+    it("Should block FREE_MINTER when freeMint is disabled", async () => {
+    await METL.addWhitelist(pool.address);
+    await METL.addFreeMinter(minter.address);
+    await METL.setMintFeeStatus();
+    await expect(METL.connect(minter).bankMint(pool.address, 1000, "Test")).to.be.revertedWith("Free minting is prohibited!");
+  });
+
   it("Should allow BURNER to BURN from POOL", async () => {
     await METL.addWhitelist(pool.address);
-    await METL.addMinter(minter.address);
-    await METL.addBurner(burner.address);
+    await METL.addFreeMinter(minter.address);
+    await METL.addFreeBurner(burner.address);
     await METL.connect(minter).bankMint(pool.address, 1000, "Test");
     await METL.connect(burner).bankBurn(pool.address, 750);
     expect(await METL.totalSupply()).to.equal(250);
+  });
+
+  it("Should block FREE_BURNER when freeBurn is disabled", async () => {
+    await METL.addWhitelist(pool.address);
+    await METL.addFreeMinter(minter.address);
+    await METL.addFreeBurner(burner.address);
+    await METL.connect(minter).bankMint(pool.address, 1000, "Test");
+    await METL.setBurnFeeStatus();
+    await expect(METL.connect(burner).bankBurn(pool.address, 750)).to.be.revertedWith("Free burning is prohibited!");
   });
 
   it("Should collect default fees to currentFeeCollector during feeBankMint", async () => {
@@ -203,7 +254,7 @@ describe("USDR", function () {
   it("Should allow OWNER to UPGRADE", async () => {
     const METLV3 = await ethers.getContractFactory("METLV3");
     const nuMETL = await upgrades.upgradeProxy(METL.address, METLV3);
-    await METL.addMinter(owner.address);
+    await METL.addFreeMinter(owner.address);
     await METL.addWhitelist(owner.address);
     await nuMETL.bankMint(owner.address, 1000, "Test");
     expect(await nuMETL.balanceOf(owner.address)).to.equal(1000);
@@ -223,10 +274,10 @@ describe("USDR", function () {
 
   it("Should block NOT-BURNERS from BURNING from WHITELIST", async () => {
     await METL.addWhitelist(pool.address);
-    await METL.addMinter(minter.address);
+    await METL.addFreeMinter(minter.address);
     await METL.addFreezer(freezer.address);
     await METL.addPauser(pauser.address);
-    await METL.addBurner(burner.address);
+    await METL.addFreeBurner(burner.address);
     await METL.connect(minter).bankMint(pool.address, 1000, "Test");
     await expect(METL.connect(owner).bankBurn(pool.address, 750)).to.be.reverted;
     await expect(METL.connect(minter).bankBurn(pool.address, 750)).to.be.reverted;
@@ -282,7 +333,7 @@ describe("USDR", function () {
 
   it("Should block FROZEN_USERS from RECEIVING", async () => {
     await METL.addFreezer(freezer.address);
-    await METL.addMinter(minter.address);
+    await METL.addFreeMinter(minter.address);
     await METL.addWhitelist(pool.address);
     await METL.connect(minter).bankMint(pool.address, 1000, "Test");
     await METL.connect(pool).transfer(frozen.address, 1000);

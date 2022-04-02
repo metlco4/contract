@@ -57,6 +57,12 @@ contract METLV3 is
   // Role for the fee controller
   bytes32 public constant FEE_CONTROLLER = keccak256("FEE_CONTROLLER");
 
+  // Role for fee less minting
+  bytes32 public constant FREE_MINTER = keccak256("FREE_MINTER");
+
+  // Role for fee less burning
+  bytes32 public constant FREE_BURNER = keccak256("FREE_BURNER");
+
   // Basis Point values
   uint256 public constant BASIS_RATE = 1000000000;
 
@@ -70,6 +76,12 @@ contract METLV3 is
   // Address where fees are collected
   address public currentFeeCollector;
 
+  // Flag for allowing mint without paying fees
+  bool public freeMinting;
+
+  // Flag for allowing burning without paying fees
+  bool public freeBurning;
+
   /**
    * @notice Initializes contract and sets state variables
    * Note: no params, just assigns deployer to default_admin_role
@@ -82,10 +94,13 @@ contract METLV3 is
     _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     _setRoleAdmin(FROZEN_USER, FREEZER_ROLE);
     variableRate = 15000000; // 15000000 = 1.5%
+    freeMinting = true; // Free minting activated
+    freeBurning = true; // Free burning activated
   }
 
   /**
    * @notice Modify basis point variable rate
+   * @param newRate the new variable rate for calculating protocol fees
    */
   function updateVariableRate(uint256 newRate)
     external
@@ -102,13 +117,29 @@ contract METLV3 is
 
   /**
   * @notice Return the keccak256 hash of a string
+  * @param transferId the transfer ID which needs to be hashed
   */
   function toBytes32(string calldata transferId) public pure returns(bytes32 hash) {
     return keccak256(abi.encodePacked(transferId));
   }
 
   /**
+  * @notice Admin function for disabling the use of free minting and burning
+  */
+  function setMintFeeStatus() external onlyRole(DEFAULT_ADMIN_ROLE) {
+    freeMinting = !freeMinting;
+  }
+
+  /**
+  * @notice Admin function for disabling the use of free minting and burning
+  */
+  function setBurnFeeStatus() external onlyRole(DEFAULT_ADMIN_ROLE) {
+    freeBurning = !freeBurning;
+  }
+
+  /**
   * @notice Set address of fee collector
+  * @param feeCollector the address which will collect protocol fees
   */
   function setFeeCollector(address feeCollector) external onlyRole(FEE_CONTROLLER) {
     currentFeeCollector = feeCollector;
@@ -116,6 +147,8 @@ contract METLV3 is
 
   /**
    * @notice Modified Revoke Role for security
+   * @param role the target role to revoke
+   * @param account the address with role to be revoked
    */
   function revokeRole(bytes32 role, address account) public override {
     if (role == DEFAULT_ADMIN_ROLE) {
@@ -126,6 +159,8 @@ contract METLV3 is
 
   /**
    * @notice Override preventing frozen accounts and the last admin from renouncing
+   * @param role the target role to revoke
+   * @param account the address with role to be revoked
    */
   function renounceRole(bytes32 role, address account) public override {
     if (role == FROZEN_USER) {
@@ -165,6 +200,50 @@ contract METLV3 is
     onlyRole(DEFAULT_ADMIN_ROLE)
   {
     grantRole(WHITELIST_USER, newAddress);
+  }
+
+  /**
+   * @notice Adds fee-less minting address
+   * @param newAddress address of user to add
+   */
+  function addFreeMinter(address newAddress)
+    external
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
+    grantRole(FREE_MINTER, newAddress);
+  }
+
+  /**
+   * @notice Removes a user's free minter role
+   * @param oldAddress address of free minter to revoke
+   */
+  function removeFreeMinter(address oldAddress)
+    external
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
+    revokeRole(FREE_MINTER, oldAddress);
+  }
+
+  /**
+   * @notice Adds fee-less burning address
+   * @param newAddress address of user to add
+   */
+  function addFreeBurner(address newAddress)
+    external
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
+    grantRole(FREE_BURNER, newAddress);
+  }
+
+  /**
+   * @notice Removes a user's free burner role
+   * @param oldAddress address of free burner to revoke
+   */
+  function removeFreeBurner(address oldAddress)
+    external
+    onlyRole(DEFAULT_ADMIN_ROLE)
+  {
+    revokeRole(FREE_BURNER, oldAddress);
   }
 
   /**
@@ -284,6 +363,7 @@ contract METLV3 is
    * @notice Minters may mint tokens to a whitelisted user while incurring fees
    * @param recipient the whitelisted user to mint to
    * @param amount how many tokens to mint
+   * @param transferId transfer ID for event logging
    */
   function feeBankMint(address recipient, uint256 amount, string calldata transferId)
     external
@@ -307,15 +387,17 @@ contract METLV3 is
    * @notice Minters may mint tokens to a whitelisted user without incurring fees
    * @param recipient the whitelisted user to mint to
    * @param amount how many tokens to mint
+   * @param transferId transfer ID for event logging
    */
   function bankMint(address recipient, uint256 amount, string calldata transferId)
     external
-    onlyRole(MINTER_ROLE)
+    onlyRole(FREE_MINTER)
   {
     require(
       hasRole(WHITELIST_USER, recipient),
       "Recipient must be whitelisted."
     );
+    require(freeMinting == true, "Free minting is prohibited!");
     bytes32 bytesId = keccak256(abi.encodePacked(transferId));
     emit ReceivedMint(recipient, amount, bytesId, transferId);
     _mint(recipient, amount);
@@ -343,8 +425,9 @@ contract METLV3 is
    */
   function bankBurn(address target, uint256 amount)
     external
-    onlyRole(BURNER_ROLE)
+    onlyRole(FREE_BURNER)
   {
+    require(freeBurning == true, "Free burning is prohibited!");
     _burn(target, amount);
   }
 
