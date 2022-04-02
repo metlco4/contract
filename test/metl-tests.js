@@ -156,7 +156,7 @@ describe("USDR", function () {
     expect(await METL.totalSupply()).to.equal(250);
   });
 
-  it("Should collect default fees to _feeCollector during feeBankMint", async () => {
+  it("Should collect default fees to currentFeeCollector during feeBankMint", async () => {
     await METL.addWhitelist(pool.address);
     await METL.addMinter(minter.address);
     await METL.addController(owner.address);

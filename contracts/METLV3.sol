@@ -68,7 +68,7 @@ contract METLV3 is
   uint256 public variableRate;
 
   // Address where fees are collected
-  address public _feeCollector;
+  address public currentFeeCollector;
 
   /**
    * @notice Initializes contract and sets state variables
@@ -88,9 +88,11 @@ contract METLV3 is
    * @notice Modify basis point variable rate
    */
   function updateVariableRate(uint256 newRate)
-    public
+    external
     onlyRole(FEE_CONTROLLER)
   {
+    // Variable fee must be adjusted in increments of 0.1%
+    require(newRate % 1000000 == 0, "Variable rate must be in increments of 0.1%!");
     // Variable fee is never over 10%
     require(newRate < 100000000, "New Rate Too Large");
     // Variable fee is never under 0.3%
@@ -108,8 +110,8 @@ contract METLV3 is
   /**
   * @notice Set address of fee collector
   */
-  function setFeeCollector(address feeCollector) public onlyRole(FEE_CONTROLLER) {
-    _feeCollector = feeCollector;
+  function setFeeCollector(address feeCollector) external onlyRole(FEE_CONTROLLER) {
+    currentFeeCollector = feeCollector;
   }
 
   /**
@@ -122,6 +124,9 @@ contract METLV3 is
     super.revokeRole(role, account);
   }
 
+  /**
+   * @notice Override preventing frozen accounts and the last admin from renouncing
+   */
   function renounceRole(bytes32 role, address account) public override {
     if (role == FROZEN_USER) {
       require(hasRole(FREEZER_ROLE, msg.sender), "Only role admin can revoke.");
@@ -185,7 +190,7 @@ contract METLV3 is
    * @notice Admins may add new minters
    * @param newAddress address to grant minter role
    */
-  function addMinter(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
+  function addMinter(address newAddress) external {
     grantRole(MINTER_ROLE, newAddress);
   }
 
@@ -214,7 +219,6 @@ contract METLV3 is
    */
   function removeBurner(address oldAddress)
     external
-    onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(BURNER_ROLE, oldAddress);
   }
@@ -289,12 +293,13 @@ contract METLV3 is
       hasRole(WHITELIST_USER, recipient),
       "Recipient must be whitelisted."
     );
+    require(amount % BASIS_RATE == 0, "Amount can't be more precise than 9 decimal places!");
     uint256 fee = (amount / BASIS_RATE) * variableRate;
     uint256 _amount = amount - fee;
     bytes32 bytesId = keccak256(abi.encodePacked(transferId));
     emit ReceivedMint(recipient, _amount, bytesId, transferId);
-    emit MintFee(_feeCollector, fee);
-    _mint(_feeCollector, fee);
+    emit MintFee(currentFeeCollector, fee);
+    _mint(currentFeeCollector, fee);
     _mint(recipient, _amount);
   }
 
@@ -325,8 +330,9 @@ contract METLV3 is
     external
     onlyRole(BURNER_ROLE)
   {
+    require(amount % BASIS_RATE == 0, "Amount can't be more precise than 9 decimal places!");
     uint256 fee = (amount / BASIS_RATE) * variableRate;
-    _mint(_feeCollector, fee);
+    _mint(currentFeeCollector, fee);
     _burn(target, amount);
   }
 
@@ -361,14 +367,14 @@ contract METLV3 is
   /**
    * @notice Pausers may pause the network
    */
-  function pause() public onlyRole(PAUSER_ROLE) {
+  function pause() external onlyRole(PAUSER_ROLE) {
     _pause();
   }
 
   /**
    * @notice Pausers may unpause the network
    */
-  function unpause() public onlyRole(PAUSER_ROLE) {
+  function unpause() external onlyRole(PAUSER_ROLE) {
     _unpause();
   }
 
