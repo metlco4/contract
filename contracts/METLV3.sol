@@ -176,7 +176,7 @@ contract METLV3 is
    * @notice Admins may add other admins
    * @param newAddress address of new admin
    */
-  function addAdmin(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
+  function addAdmin(address newAddress) external {
     grantRole(DEFAULT_ADMIN_ROLE, newAddress);
   }
 
@@ -186,7 +186,6 @@ contract METLV3 is
    */
   function removeAdmin(address oldAddress)
     external
-    onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(DEFAULT_ADMIN_ROLE, oldAddress);
   }
@@ -197,7 +196,6 @@ contract METLV3 is
    */
   function addWhitelist(address newAddress)
     external
-    onlyRole(DEFAULT_ADMIN_ROLE)
   {
     grantRole(WHITELIST_USER, newAddress);
   }
@@ -208,7 +206,6 @@ contract METLV3 is
    */
   function addFreeMinter(address newAddress)
     external
-    onlyRole(DEFAULT_ADMIN_ROLE)
   {
     grantRole(FREE_MINTER, newAddress);
   }
@@ -219,7 +216,6 @@ contract METLV3 is
    */
   function removeFreeMinter(address oldAddress)
     external
-    onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(FREE_MINTER, oldAddress);
   }
@@ -230,7 +226,6 @@ contract METLV3 is
    */
   function addFreeBurner(address newAddress)
     external
-    onlyRole(DEFAULT_ADMIN_ROLE)
   {
     grantRole(FREE_BURNER, newAddress);
   }
@@ -241,7 +236,6 @@ contract METLV3 is
    */
   function removeFreeBurner(address oldAddress)
     external
-    onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(FREE_BURNER, oldAddress);
   }
@@ -252,7 +246,6 @@ contract METLV3 is
    */
   function revokeWhitelist(address oldAddress)
     external
-    onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(WHITELIST_USER, oldAddress);
   }
@@ -261,7 +254,7 @@ contract METLV3 is
    * @notice Admins may add new fee_controller
    * @param newAddress address to grant fee_controller role
    */
-  function addController(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
+  function addController(address newAddress) external {
     grantRole(FEE_CONTROLLER, newAddress);
   }
 
@@ -279,7 +272,6 @@ contract METLV3 is
    */
   function removeMinter(address oldAddress)
     external
-    onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(MINTER_ROLE, oldAddress);
   }
@@ -288,7 +280,7 @@ contract METLV3 is
    * @notice Admins may add new burners
    * @param newAddress address to grant burner role
    */
-  function addBurner(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
+  function addBurner(address newAddress) external {
     grantRole(BURNER_ROLE, newAddress);
   }
 
@@ -308,7 +300,6 @@ contract METLV3 is
    */
   function addFreezer(address newAddress)
     external
-    onlyRole(DEFAULT_ADMIN_ROLE)
   {
     grantRole(FREEZER_ROLE, newAddress);
   }
@@ -319,7 +310,6 @@ contract METLV3 is
    */
   function removeFreezer(address oldAddress)
     external
-    onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(FREEZER_ROLE, oldAddress);
   }
@@ -344,7 +334,7 @@ contract METLV3 is
    * @notice Admins may add new pausers
    * @param newAddress address to grant pauser role
    */
-  function addPauser(address newAddress) external onlyRole(DEFAULT_ADMIN_ROLE) {
+  function addPauser(address newAddress) external {
     grantRole(PAUSER_ROLE, newAddress);
   }
 
@@ -354,7 +344,6 @@ contract METLV3 is
    */
   function removePauser(address oldAddress)
     external
-    onlyRole(DEFAULT_ADMIN_ROLE)
   {
     revokeRole(PAUSER_ROLE, oldAddress);
   }
