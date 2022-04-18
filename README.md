@@ -65,6 +65,18 @@ where `*_URL` is an alchemy api URL and `PRIVATE_KEY` is a deployer hotwallet pr
 
 ### To deploy on Avalanche C-Chain:
 
+You can deploy the contracts to Fuji testnet by running the following command from the CLI
+
+```npx hardhat run --network fuji scripts/deploy-metl.js```
+
+Deploy to mainnet:
+
+```npx hardhat run --network mainnet scripts/deploy-metl.js```
+
+https://hardhat.org/guides/deploying.html
+
+OR
+
 Duplicate contents of your solidity file to a new Remix window.
 Follow the [instructions here](https://docs.avax.network/build/tutorials/smart-contracts/deploy-a-smart-contract-on-avalanche-using-remix-and-metamask)
 
