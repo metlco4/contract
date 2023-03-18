@@ -109,9 +109,9 @@ contract METLV3 is
     // Variable fee must be adjusted in increments of 0.1%
     require(newRate % 1000000 == 0, "Variable rate must be in increments of 0.1%!");
     // Variable fee is never over 10%
-    require(newRate < 100000000, "New Rate Too Large");
+    require(newRate <= 100000000, "New Rate Too Large");
     // Variable fee is never under 0.3%
-    require(newRate > 3000000, "New Rate Too Small");
+    require(newRate >= 1000000, "New Rate Too Small");
     variableRate = newRate;
   }
 
@@ -164,7 +164,7 @@ contract METLV3 is
    */
   function renounceRole(bytes32 role, address account) public override {
     if (role == FROZEN_USER) {
-      require(hasRole(FREEZER_ROLE, msg.sender), "Only role admin can revoke.");
+      require(hasRole(FREEZER_ROLE, msg.sender), "Only role admin can revoke");
     }
     if (role == DEFAULT_ADMIN_ROLE) {
       require(getRoleMemberCount(role) > 1, "Contract requires one admin");
@@ -448,6 +448,20 @@ contract METLV3 is
    */
   function unpause() external onlyRole(PAUSER_ROLE) {
     _unpause();
+  }
+
+  /**
+   * @notice Override regular external burn
+   */
+  function burn(uint256 amount) public virtual override(ERC20BurnableUpgradeable) {
+    revert();
+  }
+
+  /**
+   * @notice Override regular external burnFrom
+   */
+  function burnFrom(address account, uint256 amount) public virtual override(ERC20BurnableUpgradeable) {
+    revert();
   }
 
   // UPGRADE

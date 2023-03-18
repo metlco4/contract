@@ -347,13 +347,21 @@ describe("USDR", function () {
 		await METL.addFreezer(freezer.address);
 		await METL.connect(freezer).freezeUser(frozen.address);
 		const FR = await METL.FROZEN_USER();
-		await expect(METL.connect(frozen).renounceRole(FR, frozen.address)).to.be.revertedWith("Only role admin can revoke.");
+		await expect(METL.connect(frozen).renounceRole(FR, frozen.address)).to.be.revertedWith("Only role admin can revoke");
 	});
 	
 	it("Should block last ADMIN from RENOUNCING", async () => {
 		const DAR = await METL.DEFAULT_ADMIN_ROLE();
 		await expect(METL.renounceRole(DAR, owner.address)).to.be.revertedWith("Contract requires one admin")
 	});
+
+    it("Should revert on burn", async () => {
+      await expect(METL.burn(10000000)).to.be.reverted;
+    });
+
+    it("Should revert on burnFrom", async () => {
+      await expect(METL.burn(minter, 10000000)).to.be.reverted;
+    });
 
   // it("Should block NOT-OWNER to UPGRADE", async () => {
   // 	const METLV2 = await ethers.getContractFactory("METLV2");
