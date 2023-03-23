@@ -29,6 +29,7 @@ import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
  *
  * @author mpbowes, dcoleman, mkdir, st4rgard3n
  */
+
 contract METLV3 is
   Initializable,
   ERC20Upgradeable,
@@ -73,7 +74,7 @@ contract METLV3 is
   event MintFee(address indexed feeCollector, uint256 indexed fee);
 
   // Burn transaction initiated by transferId
-  event ReceivedBurn(address indexed recipient, uint256 indexed amount, bytes32 indexed transferId);
+  event ReceivedBurn(address indexed recipient, uint256 indexed amount, bytes32 indexed actionId);
 
   // Burning fee
   event BurnFee(address indexed feeCollector, uint256 indexed fee);
@@ -173,182 +174,6 @@ contract METLV3 is
   }
 
   /**
-   * @notice Admins may add other admins
-   * @param newAddress address of new admin
-   */
-  function addAdmin(address newAddress) external {
-    grantRole(DEFAULT_ADMIN_ROLE, newAddress);
-  }
-
-  /**
-   * @notice Admins may revoke other admins
-   * @param oldAddress address of admin to revoke
-   */
-  function removeAdmin(address oldAddress)
-    external
-  {
-    revokeRole(DEFAULT_ADMIN_ROLE, oldAddress);
-  }
-
-  /**
-   * @notice Whitelists a whitelisted user address
-   * @param newAddress address of user to add
-   */
-  function addWhitelist(address newAddress)
-    external
-  {
-    grantRole(WHITELIST_USER, newAddress);
-  }
-
-  /**
-   * @notice Adds fee-less minting address
-   * @param newAddress address of user to add
-   */
-  function addFreeMinter(address newAddress)
-    external
-  {
-    grantRole(FREE_MINTER, newAddress);
-  }
-
-  /**
-   * @notice Removes a user's free minter role
-   * @param oldAddress address of free minter to revoke
-   */
-  function removeFreeMinter(address oldAddress)
-    external
-  {
-    revokeRole(FREE_MINTER, oldAddress);
-  }
-
-  /**
-   * @notice Adds fee-less burning address
-   * @param newAddress address of user to add
-   */
-  function addFreeBurner(address newAddress)
-    external
-  {
-    grantRole(FREE_BURNER, newAddress);
-  }
-
-  /**
-   * @notice Removes a user's free burner role
-   * @param oldAddress address of free burner to revoke
-   */
-  function removeFreeBurner(address oldAddress)
-    external
-  {
-    revokeRole(FREE_BURNER, oldAddress);
-  }
-
-  /**
-   * @notice Removes a user's whitelist address
-   * @param oldAddress address of whitelist to add
-   */
-  function revokeWhitelist(address oldAddress)
-    external
-  {
-    revokeRole(WHITELIST_USER, oldAddress);
-  }
-
-  /**
-   * @notice Admins may add new fee_controller
-   * @param newAddress address to grant fee_controller role
-   */
-  function addController(address newAddress) external {
-    grantRole(FEE_CONTROLLER, newAddress);
-  }
-
-  /**
-   * @notice Admins may add new minters
-   * @param newAddress address to grant minter role
-   */
-  function addMinter(address newAddress) external {
-    grantRole(MINTER_ROLE, newAddress);
-  }
-
-  /**
-   * @notice Admins may revoke minters
-   * @param oldAddress address of minter to revoke
-   */
-  function removeMinter(address oldAddress)
-    external
-  {
-    revokeRole(MINTER_ROLE, oldAddress);
-  }
-
-  /**
-   * @notice Admins may add new burners
-   * @param newAddress address to grant burner role
-   */
-  function addBurner(address newAddress) external {
-    grantRole(BURNER_ROLE, newAddress);
-  }
-
-  /**
-   * @notice Admins may revoke burners
-   * @param oldAddress address of burner to revoke
-   */
-  function removeBurner(address oldAddress)
-    external
-  {
-    revokeRole(BURNER_ROLE, oldAddress);
-  }
-
-  /**
-   * @notice Admins may add new freezers
-   * @param newAddress address to grant freezer role
-   */
-  function addFreezer(address newAddress)
-    external
-  {
-    grantRole(FREEZER_ROLE, newAddress);
-  }
-
-  /**
-   * @notice Admins may revoke freezers
-   * @param oldAddress address of freezer to revoke
-   */
-  function removeFreezer(address oldAddress)
-    external
-  {
-    revokeRole(FREEZER_ROLE, oldAddress);
-  }
-
-  /**
-   * @notice Freezers may 'freeze' users
-   * @param newAddress address to freeze
-   */
-  function freezeUser(address newAddress) external onlyRole(FREEZER_ROLE) {
-    grantRole(FROZEN_USER, newAddress);
-  }
-
-  /**
-   * @notice Freezers may 'unfreeze' users
-   * @param oldAddress address to unfreeze
-   */
-  function unfreezeUser(address oldAddress) external onlyRole(FREEZER_ROLE) {
-    revokeRole(FROZEN_USER, oldAddress);
-  }
-
-  /**
-   * @notice Admins may add new pausers
-   * @param newAddress address to grant pauser role
-   */
-  function addPauser(address newAddress) external {
-    grantRole(PAUSER_ROLE, newAddress);
-  }
-
-  /**
-   * @notice Admins may revoke pausers
-   * @param oldAddress address of pauser to revoke
-   */
-  function removePauser(address oldAddress)
-    external
-  {
-    revokeRole(PAUSER_ROLE, oldAddress);
-  }
-
-  /**
    * @notice Minters may mint tokens to a whitelisted user while incurring fees
    * @param recipient the whitelisted user to mint to
    * @param amount how many tokens to mint
@@ -395,14 +220,14 @@ contract METLV3 is
    * @param target the address to burn from
    * @param amount how many tokens to burn
    */
-  function feeBankBurn(address target, uint256 amount, bytes32 transferId)
+  function feeBankBurn(address target, uint256 amount, bytes32 actionId)
     external
     onlyRole(BURNER_ROLE)
   {
     require(amount % BASIS_RATE == 0, "Amount can't be more precise than 9 decimal places!");
     uint256 fee = (amount / BASIS_RATE) * variableRate;
     _mint(currentFeeCollector, fee);
-    emit ReceivedBurn(target, amount, transferId);
+    emit ReceivedBurn(target, amount, actionId);
     emit BurnFee(currentFeeCollector, fee);
     _burn(target, amount);
   }
@@ -412,12 +237,12 @@ contract METLV3 is
    * @param target the address to burn from
    * @param amount how many tokens to burn
    */
-  function bankBurn(address target, uint256 amount, bytes32 transferId)
+  function bankBurn(address target, uint256 amount, bytes32 actionId)
     external
     onlyRole(FREE_BURNER)
   {
     require(freeBurning == true, "Free burning is prohibited!");
-    emit ReceivedBurn(target, amount, transferId);
+    emit ReceivedBurn(target, amount, actionId);
     _burn(target, amount);
   }
 
