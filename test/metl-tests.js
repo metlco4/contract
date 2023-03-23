@@ -1,6 +1,6 @@
 const { expect } = require("chai");
 const { ethers, upgrades } = require("hardhat");
-const {BigNumber} = require("ethers");
+const { BigNumber } = require("ethers");
 
 describe("USDR", function () {
   let Token;
@@ -13,6 +13,12 @@ describe("USDR", function () {
   let frozen;
   let pool;
   let user;
+
+  const message = "TransactionId";
+
+  const messageBuffer = ethers.utils.toUtf8Bytes(message);
+
+  const hash = ethers.utils.keccak256(messageBuffer);
 
   beforeEach(async function () {
     Token = await ethers.getContractFactory("METLV3");
@@ -178,7 +184,7 @@ describe("USDR", function () {
   it("Should allow MINTER to MINT", async () => {
     await METL.addWhitelist(pool.address);
     await METL.addFreeMinter(minter.address);
-    await METL.connect(minter).bankMint(pool.address, 1000, "Test");
+    await METL.connect(minter).bankMint(pool.address, 1000, hash);
     expect(await METL.totalSupply()).to.equal(1000);
   });
 
@@ -186,14 +192,14 @@ describe("USDR", function () {
     await METL.addWhitelist(pool.address);
     await METL.addFreeMinter(minter.address);
     await METL.setMintFeeStatus();
-    await expect(METL.connect(minter).bankMint(pool.address, 1000, "Test")).to.be.revertedWith("Free minting is prohibited!");
+    await expect(METL.connect(minter).bankMint(pool.address, 1000, hash)).to.be.revertedWith("Free minting is prohibited!");
   });
 
   it("Should allow BURNER to BURN from POOL", async () => {
     await METL.addWhitelist(pool.address);
     await METL.addFreeMinter(minter.address);
     await METL.addFreeBurner(burner.address);
-    await METL.connect(minter).bankMint(pool.address, 1000, "Test");
+    await METL.connect(minter).bankMint(pool.address, 1000, hash);
     await METL.connect(burner).bankBurn(pool.address, 750);
     expect(await METL.totalSupply()).to.equal(250);
   });
@@ -202,7 +208,7 @@ describe("USDR", function () {
     await METL.addWhitelist(pool.address);
     await METL.addFreeMinter(minter.address);
     await METL.addFreeBurner(burner.address);
-    await METL.connect(minter).bankMint(pool.address, 1000, "Test");
+    await METL.connect(minter).bankMint(pool.address, 1000, hash);
     await METL.setBurnFeeStatus();
     await expect(METL.connect(burner).bankBurn(pool.address, 750)).to.be.revertedWith("Free burning is prohibited!");
   });
@@ -212,7 +218,7 @@ describe("USDR", function () {
     await METL.addMinter(minter.address);
     await METL.addController(owner.address);
     await METL.setFeeCollector(owner.address);
-    await METL.connect(minter).feeBankMint(pool.address, 1000000000000000, "Test");
+    await METL.connect(minter).feeBankMint(pool.address, 1000000000000000, hash);
     expect(await METL.balanceOf(owner.address)).to.equal(15000000000000);
   });
 
@@ -256,7 +262,7 @@ describe("USDR", function () {
     const nuMETL = await upgrades.upgradeProxy(METL.address, METLV3);
     await METL.addFreeMinter(owner.address);
     await METL.addWhitelist(owner.address);
-    await nuMETL.bankMint(owner.address, 1000, "Test");
+    await nuMETL.bankMint(owner.address, 1000, hash);
     expect(await nuMETL.balanceOf(owner.address)).to.equal(1000);
   });
 
@@ -265,11 +271,11 @@ describe("USDR", function () {
     await METL.addBurner(burner.address);
     await METL.addFreezer(freezer.address);
     await METL.addPauser(pauser.address);
-    await expect(METL.connect(owner).bankMint(pool.address, 1000, "Test")).to.be.reverted;
-    await expect(METL.connect(burner).bankMint(pool.address, 1000, "Test")).to.be.reverted;
-    await expect(METL.connect(freezer).bankMint(pool.address, 1000, "Test")).to.be.reverted;
-    await expect(METL.connect(pauser).bankMint(pool.address, 1000, "Test")).to.be.reverted;
-    await expect(METL.connect(user).bankMint(pool.address, 1000, "Test")).to.be.reverted;
+    await expect(METL.connect(owner).bankMint(pool.address, 1000, hash)).to.be.reverted;
+    await expect(METL.connect(burner).bankMint(pool.address, 1000, hash)).to.be.reverted;
+    await expect(METL.connect(freezer).bankMint(pool.address, 1000, hash)).to.be.reverted;
+    await expect(METL.connect(pauser).bankMint(pool.address, 1000, hash)).to.be.reverted;
+    await expect(METL.connect(user).bankMint(pool.address, 1000, hash)).to.be.reverted;
   });
 
   it("Should block NOT-BURNERS from BURNING from WHITELIST", async () => {
@@ -278,7 +284,7 @@ describe("USDR", function () {
     await METL.addFreezer(freezer.address);
     await METL.addPauser(pauser.address);
     await METL.addFreeBurner(burner.address);
-    await METL.connect(minter).bankMint(pool.address, 1000, "Test");
+    await METL.connect(minter).bankMint(pool.address, 1000, hash);
     await expect(METL.connect(owner).bankBurn(pool.address, 750)).to.be.reverted;
     await expect(METL.connect(minter).bankBurn(pool.address, 750)).to.be.reverted;
     await expect(METL.connect(freezer).bankBurn(pool.address, 750)).to.be.reverted;
@@ -335,7 +341,7 @@ describe("USDR", function () {
     await METL.addFreezer(freezer.address);
     await METL.addFreeMinter(minter.address);
     await METL.addWhitelist(pool.address);
-    await METL.connect(minter).bankMint(pool.address, 1000, "Test");
+    await METL.connect(minter).bankMint(pool.address, 1000, hash);
     await METL.connect(pool).transfer(frozen.address, 1000);
     await METL.connect(freezer).freezeUser(frozen.address);
     await expect(

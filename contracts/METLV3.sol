@@ -27,7 +27,7 @@ import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 /**
  * @title ERC20 token for Metl by RaidGuild
  *
- * @author mpbowes, dcoleman, mkdir, kyle_stargarden
+ * @author mpbowes, dcoleman, mkdir, st4rgard3n
  */
 contract METLV3 is
   Initializable,
@@ -66,7 +66,7 @@ contract METLV3 is
   // Basis Point values
   uint256 public constant BASIS_RATE = 1000000000;
 
-  event ReceivedMint(address indexed receipient, uint256 indexed amount, bytes32 indexed bytesId, string transferId);
+  event ReceivedMint(address indexed receipient, uint256 indexed amount, bytes32 indexed transferId);
 
   event MintFee(address indexed feeCollector, uint256 indexed fee);
 
@@ -354,7 +354,7 @@ contract METLV3 is
    * @param amount how many tokens to mint
    * @param transferId transfer ID for event logging
    */
-  function feeBankMint(address recipient, uint256 amount, string calldata transferId)
+  function feeBankMint(address recipient, uint256 amount, bytes32 transferId)
     external
     onlyRole(MINTER_ROLE)
   {
@@ -365,8 +365,7 @@ contract METLV3 is
     require(amount % BASIS_RATE == 0, "Amount can't be more precise than 9 decimal places!");
     uint256 fee = (amount / BASIS_RATE) * variableRate;
     uint256 _amount = amount - fee;
-    bytes32 bytesId = keccak256(abi.encodePacked(transferId));
-    emit ReceivedMint(recipient, _amount, bytesId, transferId);
+    emit ReceivedMint(recipient, _amount, transferId);
     emit MintFee(currentFeeCollector, fee);
     _mint(currentFeeCollector, fee);
     _mint(recipient, _amount);
@@ -378,7 +377,7 @@ contract METLV3 is
    * @param amount how many tokens to mint
    * @param transferId transfer ID for event logging
    */
-  function bankMint(address recipient, uint256 amount, string calldata transferId)
+  function bankMint(address recipient, uint256 amount, bytes32 transferId)
     external
     onlyRole(FREE_MINTER)
   {
@@ -387,8 +386,7 @@ contract METLV3 is
       "Recipient must be whitelisted."
     );
     require(freeMinting == true, "Free minting is prohibited!");
-    bytes32 bytesId = keccak256(abi.encodePacked(transferId));
-    emit ReceivedMint(recipient, amount, bytesId, transferId);
+    emit ReceivedMint(recipient, amount, transferId);
     _mint(recipient, amount);
   }
 
