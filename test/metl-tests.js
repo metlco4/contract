@@ -200,7 +200,7 @@ describe("USDR", function () {
     await METL.addFreeMinter(minter.address);
     await METL.addFreeBurner(burner.address);
     await METL.connect(minter).bankMint(pool.address, 1000, hash);
-    await METL.connect(burner).bankBurn(pool.address, 750);
+    await METL.connect(burner).bankBurn(pool.address, 750, hash);
     expect(await METL.totalSupply()).to.equal(250);
   });
 
@@ -210,7 +210,7 @@ describe("USDR", function () {
     await METL.addFreeBurner(burner.address);
     await METL.connect(minter).bankMint(pool.address, 1000, hash);
     await METL.setBurnFeeStatus();
-    await expect(METL.connect(burner).bankBurn(pool.address, 750)).to.be.revertedWith("Free burning is prohibited!");
+    await expect(METL.connect(burner).bankBurn(pool.address, 750, hash)).to.be.revertedWith("Free burning is prohibited!");
   });
 
   it("Should collect default fees to currentFeeCollector during feeBankMint", async () => {
@@ -285,13 +285,13 @@ describe("USDR", function () {
     await METL.addPauser(pauser.address);
     await METL.addFreeBurner(burner.address);
     await METL.connect(minter).bankMint(pool.address, 1000, hash);
-    await expect(METL.connect(owner).bankBurn(pool.address, 750)).to.be.reverted;
-    await expect(METL.connect(minter).bankBurn(pool.address, 750)).to.be.reverted;
-    await expect(METL.connect(freezer).bankBurn(pool.address, 750)).to.be.reverted;
-    await expect(METL.connect(pauser).bankBurn(pool.address, 750)).to.be.reverted;
-    await expect(METL.connect(user).bankBurn(pool.address, 750)).to.be.reverted;
+    await expect(METL.connect(owner).bankBurn(pool.address, 750, hash)).to.be.reverted;
+    await expect(METL.connect(minter).bankBurn(pool.address, 750, hash)).to.be.reverted;
+    await expect(METL.connect(freezer).bankBurn(pool.address, 750, hash)).to.be.reverted;
+    await expect(METL.connect(pauser).bankBurn(pool.address, 750, hash)).to.be.reverted;
+    await expect(METL.connect(user).bankBurn(pool.address, 750, hash)).to.be.reverted;
     expect(await METL.totalSupply()).to.equal(1000);
-    await METL.connect(burner).bankBurn(pool.address, 500);
+    await METL.connect(burner).bankBurn(pool.address, 500, hash);
     expect(await METL.totalSupply()).to.equal(500);
   });
 

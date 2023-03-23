@@ -66,9 +66,17 @@ contract METLV3 is
   // Basis Point values
   uint256 public constant BASIS_RATE = 1000000000;
 
+  // Mint transaction cleared by transferId
   event ReceivedMint(address indexed receipient, uint256 indexed amount, bytes32 indexed transferId);
 
+  // Minting fee
   event MintFee(address indexed feeCollector, uint256 indexed fee);
+
+  // Burn transaction initiated by transferId
+  event ReceivedBurn(address indexed recipient, uint256 indexed amount, bytes32 indexed transferId);
+
+  // Burning fee
+  event BurnFee(address indexed feeCollector, uint256 indexed fee);
 
   // variableRate is the
   uint256 public variableRate;
@@ -108,19 +116,11 @@ contract METLV3 is
   {
     // Variable fee must be adjusted in increments of 0.1%
     require(newRate % 1000000 == 0, "Variable rate must be in increments of 0.1%!");
-    // Variable fee is never over 10%
+    // Variable fee max
     require(newRate <= 100000000, "New Rate Too Large");
-    // Variable fee is never under 0.3%
+    // Variable fee min
     require(newRate >= 1000000, "New Rate Too Small");
     variableRate = newRate;
-  }
-
-  /**
-  * @notice Return the keccak256 hash of a string
-  * @param transferId the transfer ID which needs to be hashed
-  */
-  function toBytes32(string calldata transferId) public pure returns(bytes32 hash) {
-    return keccak256(abi.encodePacked(transferId));
   }
 
   /**
@@ -364,11 +364,11 @@ contract METLV3 is
     );
     require(amount % BASIS_RATE == 0, "Amount can't be more precise than 9 decimal places!");
     uint256 fee = (amount / BASIS_RATE) * variableRate;
-    uint256 _amount = amount - fee;
-    emit ReceivedMint(recipient, _amount, transferId);
+    uint256 adjustedAmount = amount - fee;
+    emit ReceivedMint(recipient, adjustedAmount, transferId);
     emit MintFee(currentFeeCollector, fee);
     _mint(currentFeeCollector, fee);
-    _mint(recipient, _amount);
+    _mint(recipient, adjustedAmount);
   }
 
   /**
@@ -395,13 +395,15 @@ contract METLV3 is
    * @param target the address to burn from
    * @param amount how many tokens to burn
    */
-  function feeBankBurn(address target, uint256 amount)
+  function feeBankBurn(address target, uint256 amount, bytes32 transferId)
     external
     onlyRole(BURNER_ROLE)
   {
     require(amount % BASIS_RATE == 0, "Amount can't be more precise than 9 decimal places!");
     uint256 fee = (amount / BASIS_RATE) * variableRate;
     _mint(currentFeeCollector, fee);
+    emit ReceivedBurn(target, amount, transferId);
+    emit BurnFee(currentFeeCollector, fee);
     _burn(target, amount);
   }
 
@@ -410,11 +412,12 @@ contract METLV3 is
    * @param target the address to burn from
    * @param amount how many tokens to burn
    */
-  function bankBurn(address target, uint256 amount)
+  function bankBurn(address target, uint256 amount, bytes32 transferId)
     external
     onlyRole(FREE_BURNER)
   {
     require(freeBurning == true, "Free burning is prohibited!");
+    emit ReceivedBurn(target, amount, transferId);
     _burn(target, amount);
   }
 
