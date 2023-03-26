@@ -71,13 +71,13 @@ contract METLV3 is
   event ReceivedMint(address indexed receipient, uint256 indexed amount, bytes32 indexed transferId);
 
   // Minting fee
-  event MintFee(address indexed feeCollector, uint256 indexed fee);
+  event MintFee(address indexed feeCollector, uint256 indexed fee, bytes32 indexed transferId);
 
   // Burn transaction initiated by transferId
   event ReceivedBurn(address indexed recipient, uint256 indexed amount, bytes32 indexed actionId);
 
   // Burning fee
-  event BurnFee(address indexed feeCollector, uint256 indexed fee);
+  event BurnFee(address indexed feeCollector, uint256 indexed fee, bytes32 indexed actionId);
 
   // variableRate is the
   uint256 public variableRate;
@@ -191,7 +191,7 @@ contract METLV3 is
     uint256 fee = (amount / BASIS_RATE) * variableRate;
     uint256 adjustedAmount = amount - fee;
     emit ReceivedMint(recipient, adjustedAmount, transferId);
-    emit MintFee(currentFeeCollector, fee);
+    emit MintFee(currentFeeCollector, fee, transferId);
     _mint(currentFeeCollector, fee);
     _mint(recipient, adjustedAmount);
   }
@@ -228,7 +228,7 @@ contract METLV3 is
     uint256 fee = (amount / BASIS_RATE) * variableRate;
     _mint(currentFeeCollector, fee);
     emit ReceivedBurn(target, amount, actionId);
-    emit BurnFee(currentFeeCollector, fee);
+    emit BurnFee(currentFeeCollector, fee, actionId);
     _burn(target, amount);
   }
 
