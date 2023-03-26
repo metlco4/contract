@@ -68,7 +68,7 @@ contract METLV3 is
   uint256 public constant BASIS_RATE = 1000000000;
 
   // Mint transaction cleared by transferId
-  event ReceivedMint(address indexed receipient, uint256 indexed amount, bytes32 indexed transferId);
+  event ReceivedMint(address indexed recipient, uint256 indexed amount, bytes32 indexed transferId);
 
   // Minting fee
   event MintFee(address indexed feeCollector, uint256 indexed fee, bytes32 indexed transferId);
