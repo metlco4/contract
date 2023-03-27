@@ -152,25 +152,12 @@ contract METLV3 is
     bool newFreeMinting,
     uint256 newCommitCooldown,
     uint256 newCooldownMultiplier
-  ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+  )
+    external onlyRole(DEFAULT_ADMIN_ROLE) {
     freeBurning = newFreeBurning;
     freeMinting = newFreeMinting;
     commitCooldown = newCommitCooldown;
     cooldownMultiplier = newCooldownMultiplier;
-  }
-
-  /**
-  * @notice Admin function for disabling the use of free minting and burning
-  */
-  function setMintFeeStatus() external onlyRole(DEFAULT_ADMIN_ROLE) {
-    freeMinting = !freeMinting;
-  }
-
-  /**
-  * @notice Admin function for disabling the use of free minting and burning
-  */
-  function setBurnFeeStatus() external onlyRole(DEFAULT_ADMIN_ROLE) {
-    freeBurning = !freeBurning;
   }
 
   /**
@@ -343,7 +330,7 @@ contract METLV3 is
    * @param amount how many tokens to burn
    * @param actionId chain originated action id
    */
-  function burn(address target, uint256 amount, bytes32 actionId)
+  function bankBurn(address target, uint256 amount, bytes32 actionId)
     external
     onlyRole(BURNER_ROLE)
   {

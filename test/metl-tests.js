@@ -23,8 +23,6 @@ describe("USDR", function () {
   const PAUSER_ROLE = "PAUSER_ROLE";
   const WHITELIST_USER = "WHITELIST_USER";
   const FEE_CONTROLLER = "FEE_CONTROLLER";
-  const FREE_MINTER = "FREE_MINTER";
-  const FREE_BURNER = "FREE_BURNER";
 
   const handleHashString = (string) => {
     const response = ethers.utils.toUtf8Bytes(string);
@@ -76,17 +74,9 @@ describe("USDR", function () {
 		 // eslint-disable-next-line no-unused-expressions
     expect(await METL.MINTER_ROLE()).to.exist;
   });
-    it("Should have a 'FREE_MINTER' role", async () => {
-		 // eslint-disable-next-line no-unused-expressions
-    expect(await METL.FREE_MINTER()).to.exist;
-  });
 	it("Should have a 'BURNER' role", async () => {
 		 // eslint-disable-next-line no-unused-expressions
     expect(await METL.BURNER_ROLE()).to.exist;
-  });
-    it("Should have a 'FREE_BURNER' role", async () => {
-		 // eslint-disable-next-line no-unused-expressions
-    expect(await METL.FREE_BURNER()).to.exist;
   });
 	it("Should have a 'FREEZER' role", async () => {
 		 // eslint-disable-next-line no-unused-expressions
@@ -100,6 +90,10 @@ describe("USDR", function () {
 		 // eslint-disable-next-line no-unused-expressions
     expect(await METL.PAUSER_ROLE()).to.exist;
   });
+	it("Should have a 'LIMITED_MINTER' role", async () => {
+		 // eslint-disable-next-line no-unused-expressions
+    expect(await METL.LIMITED_MINTER()).to.exist;
+  });
 	
 	it("Should block last ADMIN from revoking own role", async () => {
 		const AR = await METL.DEFAULT_ADMIN_ROLE();
@@ -109,42 +103,27 @@ describe("USDR", function () {
 
   it("Should allow MINTER to MINT", async () => {
     await METL.grantRole(handleHashString(WHITELIST_USER), pool.address);
-    await METL.grantRole(handleHashString(FREE_MINTER), minter.address);
-    await METL.connect(minter).bankMint(pool.address, 1000, handleHashString(transactionString));
+    await METL.grantRole(handleHashString(MINTER_ROLE), minter.address);
+    await METL.connect(minter).mint(pool.address, 1000, handleHashString(transactionString));
     expect(await METL.totalSupply()).to.equal(1000);
-  });
-
-    it("Should block FREE_MINTER when freeMint is disabled", async () => {
-    await METL.grantRole(handleHashString(WHITELIST_USER), pool.address);
-    await METL.grantRole(handleHashString(FREE_MINTER), minter.address);
-    await METL.setMintFeeStatus();
-    await expect(METL.connect(minter).bankMint(pool.address, 1000, handleHashString(transactionString))).to.be.revertedWith("Free minting is prohibited!");
   });
 
   it("Should allow BURNER to BURN from POOL", async () => {
     await METL.grantRole(handleHashString(WHITELIST_USER), pool.address);
-    await METL.grantRole(handleHashString(FREE_MINTER), minter.address);
-    await METL.grantRole(handleHashString(FREE_BURNER), burner.address);
-    await METL.connect(minter).bankMint(pool.address, 1000, handleHashString(transactionString));
+    await METL.grantRole(handleHashString(MINTER_ROLE), minter.address);
+    await METL.grantRole(handleHashString(BURNER_ROLE), burner.address);
+    await METL.connect(minter).mint(pool.address, 1000, handleHashString(transactionString));
     await METL.connect(burner).bankBurn(pool.address, 750, handleHashString(transactionString));
     expect(await METL.totalSupply()).to.equal(250);
-  });
-
-  it("Should block FREE_BURNER when freeBurn is disabled", async () => {
-    await METL.grantRole(handleHashString(WHITELIST_USER), pool.address);
-    await METL.grantRole(handleHashString(FREE_MINTER), minter.address);
-    await METL.grantRole(handleHashString(FREE_BURNER), burner.address);
-    await METL.connect(minter).bankMint(pool.address, 1000, handleHashString(transactionString));
-    await METL.setBurnFeeStatus();
-    await expect(METL.connect(burner).bankBurn(pool.address, 750, handleHashString(transactionString))).to.be.revertedWith("Free burning is prohibited!");
   });
 
   it("Should collect default fees to currentFeeCollector during feeBankMint", async () => {
     await METL.grantRole(handleHashString(WHITELIST_USER), pool.address);
     await METL.grantRole(handleHashString(MINTER_ROLE), minter.address);
     await METL.grantRole(handleHashString(FEE_CONTROLLER), owner.address);
+    await METL.setControls(false, false, 0, 9);
     await METL.setFeeCollector(owner.address);
-    await METL.connect(minter).feeBankMint(pool.address, 1000000000000000, handleHashString(transactionString));
+    await METL.connect(minter).mint(pool.address, 1000000000000000, handleHashString(transactionString));
     expect(await METL.balanceOf(owner.address)).to.equal(15000000000000);
   });
 
@@ -186,9 +165,9 @@ describe("USDR", function () {
   it("Should allow OWNER to UPGRADE", async () => {
     const METLV3 = await ethers.getContractFactory("METLV3");
     const nuMETL = await upgrades.upgradeProxy(METL.address, METLV3);
-    await METL.grantRole(handleHashString(FREE_MINTER), owner.address);
+    await METL.grantRole(handleHashString(MINTER_ROLE), owner.address);
     await METL.grantRole(handleHashString(WHITELIST_USER), owner.address);
-    await nuMETL.bankMint(owner.address, 1000, handleHashString(transactionString));
+    await nuMETL.mint(owner.address, 1000, handleHashString(transactionString));
     expect(await nuMETL.balanceOf(owner.address)).to.equal(1000);
   });
 
@@ -197,20 +176,20 @@ describe("USDR", function () {
     await METL.grantRole(handleHashString(BURNER_ROLE), burner.address);
     await METL.grantRole(handleHashString(FREEZER_ROLE), freezer.address);
     await METL.grantRole(handleHashString(PAUSER_ROLE), pauser.address);
-    await expect(METL.connect(owner).bankMint(pool.address, 1000, handleHashString(transactionString))).to.be.reverted;
-    await expect(METL.connect(burner).bankMint(pool.address, 1000, handleHashString(transactionString))).to.be.reverted;
-    await expect(METL.connect(freezer).bankMint(pool.address, 1000, handleHashString(transactionString))).to.be.reverted;
-    await expect(METL.connect(pauser).bankMint(pool.address, 1000, handleHashString(transactionString))).to.be.reverted;
-    await expect(METL.connect(user).bankMint(pool.address, 1000, handleHashString(transactionString))).to.be.reverted;
+    await expect(METL.connect(owner).mint(pool.address, 1000, handleHashString(transactionString))).to.be.reverted;
+    await expect(METL.connect(burner).mint(pool.address, 1000, handleHashString(transactionString))).to.be.reverted;
+    await expect(METL.connect(freezer).mint(pool.address, 1000, handleHashString(transactionString))).to.be.reverted;
+    await expect(METL.connect(pauser).mint(pool.address, 1000, handleHashString(transactionString))).to.be.reverted;
+    await expect(METL.connect(user).mint(pool.address, 1000, handleHashString(transactionString))).to.be.reverted;
   });
 
   it("Should block NOT-BURNERS from BURNING from WHITELIST", async () => {
     await METL.grantRole(handleHashString(WHITELIST_USER), pool.address);
-    await METL.grantRole(handleHashString(FREE_MINTER), minter.address);
+    await METL.grantRole(handleHashString(MINTER_ROLE), minter.address);
     await METL.grantRole(handleHashString(FREEZER_ROLE), freezer.address);
     await METL.grantRole(handleHashString(PAUSER_ROLE), pauser.address);
-    await METL.grantRole(handleHashString(FREE_BURNER), burner.address);
-    await METL.connect(minter).bankMint(pool.address, 1000, handleHashString(transactionString));
+    await METL.grantRole(handleHashString(BURNER_ROLE), burner.address);
+    await METL.connect(minter).mint(pool.address, 1000, handleHashString(transactionString));
     await expect(METL.connect(owner).bankBurn(pool.address, 750, handleHashString(transactionString))).to.be.reverted;
     await expect(METL.connect(minter).bankBurn(pool.address, 750, handleHashString(transactionString))).to.be.reverted;
     await expect(METL.connect(freezer).bankBurn(pool.address, 750, handleHashString(transactionString))).to.be.reverted;
@@ -265,9 +244,9 @@ describe("USDR", function () {
 
   it("Should block FROZEN_USERS from RECEIVING", async () => {
     await METL.grantRole(handleHashString(FREEZER_ROLE), freezer.address);
-    await METL.grantRole(handleHashString(FREE_MINTER), minter.address);
+    await METL.grantRole(handleHashString(MINTER_ROLE), minter.address);
     await METL.grantRole(handleHashString(WHITELIST_USER), pool.address);
-    await METL.connect(minter).bankMint(pool.address, 1000, handleHashString(transactionString));
+    await METL.connect(minter).mint(pool.address, 1000, handleHashString(transactionString));
     await METL.connect(pool).transfer(frozen.address, 1000);
     await METL.connect(freezer).grantRole(handleHashString(FROZEN_USER), frozen.address);
     await expect(
