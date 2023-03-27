@@ -75,6 +75,9 @@ contract METLV3 is
   // Burning fee
   event BurnFee(address indexed feeCollector, uint256 indexed fee, bytes32 indexed actionId);
 
+  // Limited mint canceled
+  event MintVetoed(address indexed recipient, uint256 indexed amount, bytes32 indexed transferId);
+
   // Limited minting commitment
   event Commit(
     address indexed recipient,
@@ -123,6 +126,8 @@ contract METLV3 is
     variableRate = 15000000; // 15000000 = 1.5%
     freeMinting = true; // Free minting activated
     freeBurning = true; // Free burning activated
+    cooldownMultiplier = 9;
+    commitCooldown = 0;
   }
 
   /**
@@ -288,6 +293,11 @@ contract METLV3 is
       _mint(currentFeeCollector, fee);
     }
 
+    bytes32 commitmentHash = _commitmentHash(recipient, amount, transferId);
+    if(mintUnlock[commitmentHash] != 0) {
+      delete mintUnlock[commitmentHash];
+    }
+
     _mint(recipient, adjustedAmount);
   }
 
@@ -331,6 +341,7 @@ contract METLV3 is
    * @notice Burners may burn tokens from a pool while incurring fees
    * @param target the address to burn from
    * @param amount how many tokens to burn
+   * @param actionId chain originated action id
    */
   function burn(address target, uint256 amount, bytes32 actionId)
     external
@@ -348,6 +359,21 @@ contract METLV3 is
     emit ReceivedBurn(target, amount, actionId);
     emit BurnFee(currentFeeCollector, fee, actionId);
     _burn(target, amount);
+  }
+
+  /**
+   * @notice Freezers may cancel pending limited minting
+   * @param recipient original recipient
+   * @param amount original amount to cancel
+   * @param transferId original transfer ID for event logging
+   */
+  function vetoMint(address recipient, uint256 amount, bytes32 transferId)
+    external
+    onlyRole(FREEZER_ROLE)
+  {
+    bytes32 mintHash = _commitmentHash(recipient, amount, transferId);
+    delete mintUnlock[mintHash];
+    emit MintVetoed(recipient, amount, transferId);
   }
 
   /**
