@@ -22,7 +22,6 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/extensions/ERC20Burnable
 import "@openzeppelin/contracts-upgradeable/security/PausableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/access/AccessControlEnumerableUpgradeable.sol";
 import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/utils/math/SafeMathUpgradeable.sol";
 
 /**
  * @title ERC20 token for Metl by RaidGuild
@@ -58,11 +57,8 @@ contract METLV3 is
   // Role for the fee controller
   bytes32 public constant FEE_CONTROLLER = keccak256("FEE_CONTROLLER");
 
-  // Role for fee less minting
-  bytes32 public constant FREE_MINTER = keccak256("FREE_MINTER");
-
-  // Role for fee less burning
-  bytes32 public constant FREE_BURNER = keccak256("FREE_BURNER");
+  // Role for limited delay enforced minting
+  bytes32 public constant LIMITED_MINTER = keccak256("LIMITED_MINTER");
 
   // Basis Point values
   uint256 public constant BASIS_RATE = 1000000000;
@@ -79,6 +75,16 @@ contract METLV3 is
   // Burning fee
   event BurnFee(address indexed feeCollector, uint256 indexed fee, bytes32 indexed actionId);
 
+  // Limited minting commitment
+  event Commit(
+    address indexed recipient,
+    uint256 indexed amount,
+    bytes32 indexed transferId,
+    uint256 mintUnlockTime,
+    uint256 commitUnlockTime,
+    address limitedMinter
+  );
+
   // variableRate is the
   uint256 public variableRate;
 
@@ -90,6 +96,18 @@ contract METLV3 is
 
   // Flag for allowing burning without paying fees
   bool public freeBurning;
+
+  // Multiplier that determines cooldown of limited minting
+  uint256 public cooldownMultiplier;
+  
+  // Commitment cooldown
+  uint256 public commitCooldown;
+
+  // Commitment hash to timestamp unlock
+  mapping(bytes32 => uint256) internal mintUnlock;
+  
+  // Unlock time for a limited minter account
+  mapping(address => uint256) public commitUnlock;
 
   /**
    * @notice Initializes contract and sets state variables
@@ -122,6 +140,18 @@ contract METLV3 is
     // Variable fee min
     require(newRate >= 1000000, "New Rate Too Small");
     variableRate = newRate;
+  }
+
+  function setControls(
+    bool newFreeBurning,
+    bool newFreeMinting,
+    uint256 newCommitCooldown,
+    uint256 newCooldownMultiplier
+  ) external onlyRole(DEFAULT_ADMIN_ROLE) {
+    freeBurning = newFreeBurning;
+    freeMinting = newFreeMinting;
+    commitCooldown = newCommitCooldown;
+    cooldownMultiplier = newCooldownMultiplier;
   }
 
   /**
@@ -173,13 +203,69 @@ contract METLV3 is
     super.renounceRole(role, account);
   }
 
+   /**
+   * @notice Limited minters must make commitments before minting
+   * @param recipient the whitelisted user to mint to
+   * @param amount how many tokens to mint
+   * @param transferId transfer ID for event logging
+   */
+  function commitMint(address recipient, uint256 amount, bytes32 transferId)
+    external
+    onlyRole(LIMITED_MINTER)
+  {
+    require(
+      hasRole(WHITELIST_USER, recipient),
+      "Recipient must be whitelisted."
+    );
+    
+    require(commitUnlock[msg.sender] >= block.timestamp, "Commitment cooldown");
+    bytes32 mintHash = _commitmentHash(recipient, amount, transferId);
+
+    require(mintUnlock[mintHash] == 0, "Transaction already queued");
+
+    uint256 unlockTime = block.timestamp + (cooldownMultiplier * (amount / 1 ether));
+    mintUnlock[mintHash] = unlockTime;
+
+    uint256 minterCooldown = block.timestamp + commitCooldown;
+    commitUnlock[msg.sender] = minterCooldown;
+
+    emit Commit(recipient, amount, transferId, unlockTime, minterCooldown, msg.sender);
+  }
+
+  /**
+   * @notice Generates hash for the limited minting queue
+   * @param _recipient the whitelisted user to mint to
+   * @param _amount how many tokens to mint
+   * @param _transferId transfer ID for event logging
+   */
+  function _commitmentHash(address _recipient, uint256 _amount, bytes32 _transferId)
+    internal
+    pure
+    returns(bytes32 _mintHash)
+  {
+    _mintHash = keccak256(abi.encode(_recipient, _amount, _transferId));
+  }
+
+  /**
+   * @notice Calculates fees
+   * @param _amount how many tokens to mint
+   */
+  function _calculateFee(uint256 _amount)
+    internal
+    view
+    returns(uint256 _fee)
+  {
+    require(_amount % BASIS_RATE == 0, "Amount can't be more precise than 9 decimal places!");
+    _fee = (_amount / BASIS_RATE) * variableRate;
+  }
+
   /**
    * @notice Minters may mint tokens to a whitelisted user while incurring fees
    * @param recipient the whitelisted user to mint to
    * @param amount how many tokens to mint
    * @param transferId transfer ID for event logging
    */
-  function feeBankMint(address recipient, uint256 amount, bytes32 transferId)
+  function mint(address recipient, uint256 amount, bytes32 transferId)
     external
     onlyRole(MINTER_ROLE)
   {
@@ -187,32 +273,58 @@ contract METLV3 is
       hasRole(WHITELIST_USER, recipient),
       "Recipient must be whitelisted."
     );
-    require(amount % BASIS_RATE == 0, "Amount can't be more precise than 9 decimal places!");
-    uint256 fee = (amount / BASIS_RATE) * variableRate;
+
+    uint256 fee;
+
+    if(freeMinting != true) {
+      fee = _calculateFee(amount);
+    }
+
     uint256 adjustedAmount = amount - fee;
     emit ReceivedMint(recipient, adjustedAmount, transferId);
     emit MintFee(currentFeeCollector, fee, transferId);
-    _mint(currentFeeCollector, fee);
+
+    if(fee > 0) {
+      _mint(currentFeeCollector, fee);
+    }
+
     _mint(recipient, adjustedAmount);
   }
 
-  /**
-   * @notice Minters may mint tokens to a whitelisted user without incurring fees
+    /**
+   * @notice Minters may mint tokens to a whitelisted user while incurring fees
    * @param recipient the whitelisted user to mint to
    * @param amount how many tokens to mint
    * @param transferId transfer ID for event logging
    */
-  function bankMint(address recipient, uint256 amount, bytes32 transferId)
+  function limitedMint(address recipient, uint256 amount, bytes32 transferId)
     external
-    onlyRole(FREE_MINTER)
+    onlyRole(LIMITED_MINTER)
   {
     require(
       hasRole(WHITELIST_USER, recipient),
       "Recipient must be whitelisted."
     );
-    require(freeMinting == true, "Free minting is prohibited!");
-    emit ReceivedMint(recipient, amount, transferId);
-    _mint(recipient, amount);
+
+    bytes32 mintHash = _commitmentHash(recipient, amount, transferId);
+    require(mintUnlock[mintHash] >= block.timestamp, "Cooldown has not yet elapsed");
+
+    uint256 fee;
+
+    if(freeMinting != true) {
+      fee = _calculateFee(amount);
+    }
+
+    uint256 adjustedAmount = amount - fee;
+    emit ReceivedMint(recipient, adjustedAmount, transferId);
+    emit MintFee(currentFeeCollector, fee, transferId);
+
+    if(fee > 0) {
+      _mint(currentFeeCollector, fee);
+    }
+
+    _mint(recipient, adjustedAmount);
+    delete mintUnlock[mintHash];
   }
 
   /**
@@ -220,29 +332,21 @@ contract METLV3 is
    * @param target the address to burn from
    * @param amount how many tokens to burn
    */
-  function feeBankBurn(address target, uint256 amount, bytes32 actionId)
+  function burn(address target, uint256 amount, bytes32 actionId)
     external
     onlyRole(BURNER_ROLE)
   {
-    require(amount % BASIS_RATE == 0, "Amount can't be more precise than 9 decimal places!");
-    uint256 fee = (amount / BASIS_RATE) * variableRate;
-    _mint(currentFeeCollector, fee);
+    uint256 fee;
+    if(freeBurning != true) {
+      fee = _calculateFee(amount);
+    }
+
+    if(fee > 0) {
+      _mint(currentFeeCollector, fee);
+    }
+
     emit ReceivedBurn(target, amount, actionId);
     emit BurnFee(currentFeeCollector, fee, actionId);
-    _burn(target, amount);
-  }
-
-  /**
-   * @notice Burners may burn tokens from a pool without incurring fees
-   * @param target the address to burn from
-   * @param amount how many tokens to burn
-   */
-  function bankBurn(address target, uint256 amount, bytes32 actionId)
-    external
-    onlyRole(FREE_BURNER)
-  {
-    require(freeBurning == true, "Free burning is prohibited!");
-    emit ReceivedBurn(target, amount, actionId);
     _burn(target, amount);
   }
 
