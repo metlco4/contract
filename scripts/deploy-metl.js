@@ -1,7 +1,7 @@
 const { ethers, upgrades } = require("hardhat");
 // eslint-disable-next-line prettier/prettier
 async function main() {
-  const METL = await ethers.getContractFactory("METLV3");
+  const METL = await ethers.getContractFactory("USDR");
   const metl = await upgrades.deployProxy(METL);
   await metl.deployed();
   const name = await metl.name();

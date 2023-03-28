@@ -29,7 +29,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
  * @author mpbowes, dcoleman, mkdir, st4rgard3n
  */
 
-contract METLV3 is
+contract USDR is
   Initializable,
   ERC20Upgradeable,
   ERC20BurnableUpgradeable,

@@ -50,7 +50,7 @@ describe("USDR", function () {
   // }
 
   beforeEach(async function () {
-    Token = await ethers.getContractFactory("METLV3");
+    Token = await ethers.getContractFactory("USDR");
     [owner, minter, burner, pauser, freezer, frozen, pool, user] =
       await ethers.getSigners();
     METL = await upgrades.deployProxy(Token);
@@ -183,8 +183,8 @@ describe("USDR", function () {
   });
 
   it("Should allow OWNER to UPGRADE", async () => {
-    const METLV3 = await ethers.getContractFactory("METLV3");
-    const nuMETL = await upgrades.upgradeProxy(METL.address, METLV3);
+    const USDR = await ethers.getContractFactory("USDR");
+    const nuMETL = await upgrades.upgradeProxy(METL.address, USDR);
     await METL.grantRole(handleHashString(MINTER_ROLE), owner.address);
     await METL.grantRole(handleHashString(WHITELIST_USER), owner.address);
     await nuMETL.mint(owner.address, 1000, handleHashString(transactionString));
@@ -345,8 +345,6 @@ describe("USDR", function () {
       const mintHash = await METL.getMintHash(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
       const currentTime = await time.latest();
       const mintTime = await METL.connect(minter).mintUnlock(mintHash);
-      console.log("Current time: ", currentTime.toString());
-      console.log("Mint time: ", mintTime.toString());
       const totalCooldown = mintTime - currentTime;
       expect(totalCooldown).to.equal(1000 * COOLDOWN_MULTIPLIER);
     });
@@ -376,8 +374,6 @@ describe("USDR", function () {
       await METL.grantRole(handleHashString(WHITELIST_USER), minter.address);
       await METL.connect(minter).commitMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
       const mintHash = await METL.getMintHash(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
-      const mintTime = await METL.mintUnlock(mintHash);
-      console.log("mint time: ", mintTime.toString());
       await METL.connect(freezer).vetoMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
       const afterVetoMintTime = await METL.mintUnlock(mintHash);
       expect(afterVetoMintTime).to.be.equal(0);
