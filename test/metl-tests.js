@@ -292,7 +292,7 @@ describe("USDR", function () {
       expect(cooldownMultiplier).to.be.equals(9);
     });
 
-    it("Should allow limited minter to make a minting commitment", async () => {
+    it("Should allow LIMITED_MINTER to make a minting commitment", async () => {
       await METL.grantRole(handleHashString(LIMITED_MINTER), minter.address);
       await METL.grantRole(handleHashString(WHITELIST_USER), minter.address);
       await METL.connect(minter).commitMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
@@ -301,7 +301,35 @@ describe("USDR", function () {
       expect(unlockTime).to.be.above(0);
     });
 
-    it("Should compute minter cooldown correctly after a commitment", async () => {
+    it("Should block LIMITED_MINTER to commit for non-whitelisted address", async () => {
+      await METL.grantRole(handleHashString(LIMITED_MINTER), minter.address);
+      await expect(METL.connect(minter).commitMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString))).to.be.revertedWith("Recipient must be whitelisted.");
+    });
+
+    it("Should block LIMITED_MINTER from committing before cooldown", async () => {
+      await METL.grantRole(handleHashString(LIMITED_MINTER), minter.address);
+      await METL.grantRole(handleHashString(WHITELIST_USER), minter.address);
+      await METL.connect(minter).commitMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
+      await expect(
+          METL.connect(minter).commitMint(
+              minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString)
+          )).to.be.revertedWith("Commitment cooldown");
+    });
+
+    it("Should block LIMITED_MINTER from making two identical commitments", async () => {
+      await METL.grantRole(handleHashString(LIMITED_MINTER), minter.address);
+      await METL.grantRole(handleHashString(WHITELIST_USER), minter.address);
+      await METL.connect(minter).commitMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
+      const mintHash = await METL.getMintHash(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
+      const mintTime = await METL.mintUnlock(mintHash);
+      await time.increaseTo(mintTime);
+      await expect(
+          METL.connect(minter).commitMint(
+              minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString)
+          )).to.be.revertedWith("Transaction already queued");
+    });
+
+    it("Should compute LIMITED_MINTER cooldown correctly after a commitment", async () => {
       await METL.grantRole(handleHashString(LIMITED_MINTER), minter.address);
       await METL.grantRole(handleHashString(WHITELIST_USER), minter.address);
       await METL.connect(minter).commitMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
@@ -333,6 +361,13 @@ describe("USDR", function () {
       await METL.connect(minter).limitedMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
       const minterBalance = await METL.balanceOf(minter.address);
       expect(minterBalance).to.be.equal("1000" + DECIMEL_ZEROES);
+    });
+
+    it("Should block limited minting before cooldown", async () => {
+      await METL.grantRole(handleHashString(LIMITED_MINTER), minter.address);
+      await METL.grantRole(handleHashString(WHITELIST_USER), minter.address);
+      await METL.connect(minter).commitMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
+      await expect(METL.connect(minter).limitedMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString))).to.be.revertedWith("Cooldown has not yet elapsed");
     });
 
     it("Should allow FREEZER to veto a queued mint", async () => {

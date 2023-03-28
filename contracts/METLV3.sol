@@ -147,6 +147,13 @@ contract METLV3 is
     variableRate = newRate;
   }
 
+  /**
+  * @notice Set all contract controls
+  * @param newFreeBurning flag for free burning
+  * @param newFreeMinting flag for free minting
+  * @param newCommitCooldown the amount of time delay between limited minting commitments
+  * @param newCooldownMultiplier the number of seconds per USDR required for a limited mint commitment to cooldown
+  */
   function setControls(
     bool newFreeBurning,
     bool newFreeMinting,
@@ -210,7 +217,7 @@ contract METLV3 is
       "Recipient must be whitelisted."
     );
     
-    require(commitUnlock[msg.sender] >= block.timestamp || commitUnlock[msg.sender] == 0, "Commitment cooldown");
+    require(commitUnlock[msg.sender] <= block.timestamp || commitUnlock[msg.sender] == 0, "Commitment cooldown");
     bytes32 mintHash = _commitmentHash(recipient, amount, transferId);
 
     require(mintUnlock[mintHash] == 0, "Transaction already queued");
