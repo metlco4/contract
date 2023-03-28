@@ -1,6 +1,7 @@
 const { expect } = require("chai");
 const { ethers, upgrades } = require("hardhat");
 const { BigNumber } = require("ethers");
+const { time } = require("@nomicfoundation/hardhat-network-helpers");
 
 describe("USDR", function () {
   let Token;
@@ -17,6 +18,7 @@ describe("USDR", function () {
   const transactionString = "TransactionId";
   
   const MINTER_ROLE = "MINTER_ROLE";
+  const LIMITED_MINTER = "LIMITED_MINTER";
   const BURNER_ROLE = "BURNER_ROLE";
   const FREEZER_ROLE = "FREEZER_ROLE";
   const FROZEN_USER = "FROZEN_USER";
@@ -24,10 +26,28 @@ describe("USDR", function () {
   const WHITELIST_USER = "WHITELIST_USER";
   const FEE_CONTROLLER = "FEE_CONTROLLER";
 
+  const COMMITMENT_COOLDOWN = 180;
+  const COOLDOWN_MULTIPLIER = 9;
+
+  const DECIMEL_ZEROES = "000000000000000000";
+
   const handleHashString = (string) => {
+
     const response = ethers.utils.toUtf8Bytes(string);
     return ethers.utils.keccak256(response);
   };
+
+  // BROKEN - SUSPECT BIGINT ENCODING ISSUE
+  // function hashMintData(addressValue, uintValue, bytesValue) {
+  //
+  // const encodedAddress = ethers.utils.defaultAbiCoder.encode(['address'], [addressValue]);
+  // const encodedUint = ethers.utils.defaultAbiCoder.encode(['uint256'], [uintValue]);
+  // const encodedBytes = ethers.utils.defaultAbiCoder.encode(['bytes32'], [bytesValue]);
+  //
+  // const hash = ethers.utils.solidityKeccak256(['address', 'uint256', 'bytes32'], [encodedAddress, encodedUint, encodedBytes]);
+  //
+  // return hash;
+  // }
 
   beforeEach(async function () {
     Token = await ethers.getContractFactory("METLV3");
@@ -265,6 +285,68 @@ describe("USDR", function () {
 		const DAR = await METL.DEFAULT_ADMIN_ROLE();
 		await expect(METL.renounceRole(DAR, owner.address)).to.be.revertedWith("Contract requires one admin")
 	});
+
+    it("Should allow ADMIN to set controls", async () => {
+      await METL.setControls(true, true, 0, 9);
+      const cooldownMultiplier = await METL.cooldownMultiplier();
+      expect(cooldownMultiplier).to.be.equals(9);
+    });
+
+    it("Should allow limited minter to make a minting commitment", async () => {
+      await METL.grantRole(handleHashString(LIMITED_MINTER), minter.address);
+      await METL.grantRole(handleHashString(WHITELIST_USER), minter.address);
+      await METL.connect(minter).commitMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
+      const unlockTime = await METL.connect(minter).commitUnlock(minter.address);
+      expect(unlockTime).to.exist;
+      expect(unlockTime).to.be.above(0);
+    });
+
+    it("Should compute minter cooldown correctly after a commitment", async () => {
+      await METL.grantRole(handleHashString(LIMITED_MINTER), minter.address);
+      await METL.grantRole(handleHashString(WHITELIST_USER), minter.address);
+      await METL.connect(minter).commitMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
+      const currentTime = await time.latest();
+      const unlockTime = await METL.connect(minter).commitUnlock(minter.address);
+      expect(currentTime + COMMITMENT_COOLDOWN).to.equal(unlockTime);
+    });
+
+    it("Should compute minting cooldown correctly after a commitment", async () => {
+      await METL.grantRole(handleHashString(LIMITED_MINTER), minter.address);
+      await METL.grantRole(handleHashString(WHITELIST_USER), minter.address);
+      await METL.connect(minter).commitMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
+      const mintHash = await METL.getMintHash(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
+      const currentTime = await time.latest();
+      const mintTime = await METL.connect(minter).mintUnlock(mintHash);
+      console.log("Current time: ", currentTime.toString());
+      console.log("Mint time: ", mintTime.toString());
+      const totalCooldown = mintTime - currentTime;
+      expect(totalCooldown).to.equal(1000 * COOLDOWN_MULTIPLIER);
+    });
+
+    it("Should allow limited minting after cooldown", async () => {
+      await METL.grantRole(handleHashString(LIMITED_MINTER), minter.address);
+      await METL.grantRole(handleHashString(WHITELIST_USER), minter.address);
+      await METL.connect(minter).commitMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
+      const mintHash = await METL.getMintHash(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
+      const mintTime = await METL.connect(minter).mintUnlock(mintHash);
+      await time.increaseTo(mintTime);
+      await METL.connect(minter).limitedMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
+      const minterBalance = await METL.balanceOf(minter.address);
+      expect(minterBalance).to.be.equal("1000" + DECIMEL_ZEROES);
+    });
+
+    it("Should allow FREEZER to veto a queued mint", async () => {
+      await METL.grantRole(handleHashString(LIMITED_MINTER), minter.address);
+      await METL.grantRole(handleHashString(FREEZER_ROLE), freezer.address);
+      await METL.grantRole(handleHashString(WHITELIST_USER), minter.address);
+      await METL.connect(minter).commitMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
+      const mintHash = await METL.getMintHash(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
+      const mintTime = await METL.mintUnlock(mintHash);
+      console.log("mint time: ", mintTime.toString());
+      await METL.connect(freezer).vetoMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
+      const afterVetoMintTime = await METL.mintUnlock(mintHash);
+      expect(afterVetoMintTime).to.be.equal(0);
+    });
 
     it("Should revert on burn", async () => {
       await expect(METL.burn(10000000)).to.be.reverted;

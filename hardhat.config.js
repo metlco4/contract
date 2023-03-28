@@ -1,5 +1,6 @@
 require("dotenv").config();
 
+require("@nomicfoundation/hardhat-network-helpers");
 require("@nomiclabs/hardhat-etherscan");
 require("@nomiclabs/hardhat-waffle");
 require("@openzeppelin/hardhat-upgrades");

@@ -107,7 +107,7 @@ contract METLV3 is
   uint256 public commitCooldown;
 
   // Commitment hash to timestamp unlock
-  mapping(bytes32 => uint256) internal mintUnlock;
+  mapping(bytes32 => uint256) public mintUnlock;
   
   // Unlock time for a limited minter account
   mapping(address => uint256) public commitUnlock;
@@ -127,7 +127,7 @@ contract METLV3 is
     freeMinting = true; // Free minting activated
     freeBurning = true; // Free burning activated
     cooldownMultiplier = 9;
-    commitCooldown = 0;
+    commitCooldown = 180;
   }
 
   /**
@@ -210,7 +210,7 @@ contract METLV3 is
       "Recipient must be whitelisted."
     );
     
-    require(commitUnlock[msg.sender] >= block.timestamp, "Commitment cooldown");
+    require(commitUnlock[msg.sender] >= block.timestamp || commitUnlock[msg.sender] == 0, "Commitment cooldown");
     bytes32 mintHash = _commitmentHash(recipient, amount, transferId);
 
     require(mintUnlock[mintHash] == 0, "Transaction already queued");
@@ -235,7 +235,7 @@ contract METLV3 is
     pure
     returns(bytes32 _mintHash)
   {
-    _mintHash = keccak256(abi.encode(_recipient, _amount, _transferId));
+    _mintHash = keccak256(abi.encodePacked(_recipient, _amount, _transferId));
   }
 
   /**
@@ -304,7 +304,7 @@ contract METLV3 is
     );
 
     bytes32 mintHash = _commitmentHash(recipient, amount, transferId);
-    require(mintUnlock[mintHash] >= block.timestamp, "Cooldown has not yet elapsed");
+    require(mintUnlock[mintHash] <= block.timestamp, "Cooldown has not yet elapsed");
 
     uint256 fee;
 
@@ -405,6 +405,16 @@ contract METLV3 is
    */
   function burnFrom(address account, uint256 amount) public virtual override(ERC20BurnableUpgradeable) {
     revert();
+  }
+
+  /**
+   * @notice returns the mint hash
+   * @param recipient address
+   * @param amount to mint
+   * @param transferId identifier
+   */
+  function getMintHash(address recipient, uint256 amount, bytes32 transferId) public pure returns(bytes32 mintHash) {
+    mintHash = _commitmentHash(recipient, amount, transferId);
   }
 
   // UPGRADE
