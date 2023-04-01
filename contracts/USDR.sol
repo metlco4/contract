@@ -1,5 +1,5 @@
 //SPDX-License-Identifier: Unlicensed
-pragma solidity 0.8.11;
+pragma solidity ^0.8.11;
 
 ////////////////////////////////////////////////////////////////////////////////////////
 //      ...     ..      ..           ..      .         .....                ...       //
@@ -88,7 +88,7 @@ contract USDR is
     address limitedMinter
   );
 
-  // variableRate is the
+  // variableRate determines the protocol fee during mint and burn
   uint256 public variableRate;
 
   // Address where fees are collected
@@ -123,11 +123,16 @@ contract USDR is
     __AccessControl_init();
     _setupRole(DEFAULT_ADMIN_ROLE, msg.sender);
     _setRoleAdmin(FROZEN_USER, FREEZER_ROLE);
-    variableRate = 15000000; // 15000000 = 1.5%
+    variableRate = 1000000; // 1000000 = 0.1%
     freeMinting = true; // Free minting activated
     freeBurning = true; // Free burning activated
     cooldownMultiplier = 9;
     commitCooldown = 180;
+  }
+
+  modifier onlyWhitelist(address recipient) {
+    require(hasRole(WHITELIST_USER, recipient), "!Whitelist");
+    _;
   }
 
   /**
@@ -142,8 +147,6 @@ contract USDR is
     require(newRate % 1000000 == 0, "Variable rate must be in increments of 0.1%!");
     // Variable fee max
     require(newRate <= 100000000, "New Rate Too Large");
-    // Variable fee min
-    require(newRate >= 1000000, "New Rate Too Small");
     variableRate = newRate;
   }
 
@@ -211,11 +214,8 @@ contract USDR is
   function commitMint(address recipient, uint256 amount, bytes32 transferId)
     external
     onlyRole(LIMITED_MINTER)
+    onlyWhitelist(recipient)
   {
-    require(
-      hasRole(WHITELIST_USER, recipient),
-      "Recipient must be whitelisted."
-    );
     
     require(commitUnlock[msg.sender] <= block.timestamp || commitUnlock[msg.sender] == 0, "Commitment cooldown");
     bytes32 mintHash = _commitmentHash(recipient, amount, transferId);
@@ -254,7 +254,7 @@ contract USDR is
     view
     returns(uint256 _fee)
   {
-    require(_amount % BASIS_RATE == 0, "Amount can't be more precise than 9 decimal places!");
+    require(_amount % BASIS_RATE == 0, "!Precision");
     _fee = (_amount / BASIS_RATE) * variableRate;
   }
 
@@ -267,11 +267,8 @@ contract USDR is
   function mint(address recipient, uint256 amount, bytes32 transferId)
     external
     onlyRole(MINTER_ROLE)
+    onlyWhitelist(recipient)
   {
-    require(
-      hasRole(WHITELIST_USER, recipient),
-      "Recipient must be whitelisted."
-    );
 
     uint256 fee;
 
@@ -304,11 +301,8 @@ contract USDR is
   function limitedMint(address recipient, uint256 amount, bytes32 transferId)
     external
     onlyRole(LIMITED_MINTER)
+    onlyWhitelist(recipient)
   {
-    require(
-      hasRole(WHITELIST_USER, recipient),
-      "Recipient must be whitelisted."
-    );
 
     bytes32 mintHash = _commitmentHash(recipient, amount, transferId);
     require(mintUnlock[mintHash] <= block.timestamp, "Cooldown has not yet elapsed");
@@ -366,6 +360,10 @@ contract USDR is
     onlyRole(FREEZER_ROLE)
   {
     bytes32 mintHash = _commitmentHash(recipient, amount, transferId);
+    uint256 timeToUnlock = mintUnlock[mintHash];
+
+    require(timeToUnlock > 0, "!Commitment");
+
     delete mintUnlock[mintHash];
     emit MintVetoed(recipient, amount, transferId);
   }

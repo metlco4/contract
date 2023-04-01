@@ -85,34 +85,79 @@ describe("USDR", function () {
     expect(await METL.getRoleMember(DFA, 0)).to.equal(owner.address);
   });
 
-  // it("Should not have more than one default admin", async () => {
-  //   const DFA = await METL.DEFAULT_ADMIN_ROLE();
-  //   // expect(await METL.getRoleMember(DFA, 1)).to.be.reverted;
-  // });
-
 	it("Should have a 'MINTER' role", async () => {
 		 // eslint-disable-next-line no-unused-expressions
     expect(await METL.MINTER_ROLE()).to.exist;
   });
+
 	it("Should have a 'BURNER' role", async () => {
 		 // eslint-disable-next-line no-unused-expressions
     expect(await METL.BURNER_ROLE()).to.exist;
   });
+
 	it("Should have a 'FREEZER' role", async () => {
 		 // eslint-disable-next-line no-unused-expressions
     expect(await METL.FREEZER_ROLE()).to.exist;
   });
+
 	it("Should have a 'FROZEN' role", async () => {
 		 // eslint-disable-next-line no-unused-expressions
     expect(await METL.FROZEN_USER()).to.exist;
   });
+
 	it("Should have a 'PAUSER' role", async () => {
 		 // eslint-disable-next-line no-unused-expressions
     expect(await METL.PAUSER_ROLE()).to.exist;
   });
+
+    it("Should have a 'WHITELIST_USER' role", async () => {
+		 // eslint-disable-next-line no-unused-expressions
+    expect(await METL.WHITELIST_USER()).to.exist;
+  });
+
+    it("Should have a 'FEE_CONTROLLER' role", async () => {
+		 // eslint-disable-next-line no-unused-expressions
+    expect(await METL.FEE_CONTROLLER()).to.exist;
+  });
+
 	it("Should have a 'LIMITED_MINTER' role", async () => {
 		 // eslint-disable-next-line no-unused-expressions
     expect(await METL.LIMITED_MINTER()).to.exist;
+  });
+
+    it("Should have a basis rate", async () => {
+		 // eslint-disable-next-line no-unused-expressions
+    expect(await METL.BASIS_RATE()).to.exist;
+  });
+
+    it("Should have a variable rate", async () => {
+		 // eslint-disable-next-line no-unused-expressions
+    expect(await METL.variableRate()).to.exist;
+  });
+
+    it("Should NOT have a current fee collector", async () => {
+		 // eslint-disable-next-line no-unused-expressions
+    expect(await METL.currentFeeCollector()).to.be.equals("0x0000000000000000000000000000000000000000");
+  });
+
+    it("Should have free minting flag set to true", async () => {
+      const bool = await METL.freeMinting();
+      expect(bool).to.be.equals(true);
+    });
+
+    it("Should have free burning flag set to true", async () => {
+      const bool = await METL.freeBurning();
+      expect(bool).to.be.equals(true);
+    });
+
+    it("Should have a cooldown multiplier", async () => {
+		 // eslint-disable-next-line no-unused-expressions
+    expect(await METL.cooldownMultiplier()).to.exist;
+  });
+
+    it("Should have a commitment cooldown", async () => {
+		 // eslint-disable-next-line no-unused-expressions
+    expect(await METL.commitCooldown()).to.exist;
   });
 	
 	it("Should block last ADMIN from revoking own role", async () => {
@@ -144,7 +189,16 @@ describe("USDR", function () {
     await METL.setControls(false, false, 0, 9);
     await METL.setFeeCollector(owner.address);
     await METL.connect(minter).mint(pool.address, 1000000000000000, handleHashString(transactionString));
-    expect(await METL.balanceOf(owner.address)).to.equal(15000000000000);
+    expect(await METL.balanceOf(owner.address)).to.equal(1000000000000);
+  });
+
+  it("Should revert if amount is not cleanly divided by basis rate", async () => {
+    await METL.grantRole(handleHashString(WHITELIST_USER), pool.address);
+    await METL.grantRole(handleHashString(MINTER_ROLE), minter.address);
+    await METL.grantRole(handleHashString(FEE_CONTROLLER), owner.address);
+    await METL.setControls(false, false, 0, 9);
+    await METL.setFeeCollector(owner.address);
+    await expect(METL.connect(minter).mint(pool.address, 1000000000000001, handleHashString(transactionString))).to.be.revertedWith("!Precision");
   });
 
   it("Should allow FREEZER to FREEZE a USER", async () => {
@@ -289,7 +343,13 @@ describe("USDR", function () {
     it("Should allow ADMIN to set controls", async () => {
       await METL.setControls(true, true, 0, 9);
       const cooldownMultiplier = await METL.cooldownMultiplier();
+      const commitCooldown = await METL.commitCooldown();
+      const freeMint = await METL.freeMinting();
+      const freeBurn = await METL.freeBurning();
       expect(cooldownMultiplier).to.be.equals(9);
+      expect(commitCooldown).to.be.equals(0);
+      expect(freeMint).to.be.equals(true);
+      expect(freeBurn).to.be.equals(true);
     });
 
     it("Should allow LIMITED_MINTER to make a minting commitment", async () => {
@@ -303,7 +363,7 @@ describe("USDR", function () {
 
     it("Should block LIMITED_MINTER to commit for non-whitelisted address", async () => {
       await METL.grantRole(handleHashString(LIMITED_MINTER), minter.address);
-      await expect(METL.connect(minter).commitMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString))).to.be.revertedWith("Recipient must be whitelisted.");
+      await expect(METL.connect(minter).commitMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString))).to.be.revertedWith("!Whitelist");
     });
 
     it("Should block LIMITED_MINTER from committing before cooldown", async () => {
@@ -377,6 +437,32 @@ describe("USDR", function () {
       await METL.connect(freezer).vetoMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
       const afterVetoMintTime = await METL.mintUnlock(mintHash);
       expect(afterVetoMintTime).to.be.equal(0);
+    });
+
+    it("Should revert on malformed veto data", async () => {
+      await METL.grantRole(handleHashString(LIMITED_MINTER), minter.address);
+      await METL.grantRole(handleHashString(FREEZER_ROLE), freezer.address);
+      await METL.grantRole(handleHashString(WHITELIST_USER), minter.address);
+      await METL.connect(minter).commitMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
+      const mintHash = await METL.getMintHash(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
+      await expect(METL.connect(freezer).vetoMint(minter.address, BigNumber.from("10000" + DECIMEL_ZEROES), handleHashString(transactionString))).to.be.revertedWith("!Commitment");
+    });
+
+    it("Should allow FEE_CONTROLLER to set the variable fee", async () => {
+      await METL.grantRole(handleHashString(FEE_CONTROLLER), minter.address);
+      await METL.connect(minter).updateVariableRate(100000000);
+      const newFee = await METL.variableRate();
+      expect(newFee).to.be.equal(100000000);
+    });
+
+    it("Should revert if variable fee doesn't cleanly divide basis rate", async () => {
+      await METL.grantRole(handleHashString(FEE_CONTROLLER), minter.address);
+      await expect(METL.connect(minter).updateVariableRate(100000001)).to.be.revertedWith("Variable rate must be in increments of 0.1%!");
+    });
+
+    it("Should revert if variable fee is too high", async () => {
+      await METL.grantRole(handleHashString(FEE_CONTROLLER), minter.address);
+      await expect(METL.connect(minter).updateVariableRate(101000000)).to.be.revertedWith("New Rate Too Large");
     });
 
     it("Should revert on burn", async () => {
