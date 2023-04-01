@@ -1,0 +1,784 @@
+{
+ "stats": {
+  "suites": 1,
+  "tests": 55,
+  "passes": 55,
+  "pending": 0,
+  "failures": 0
+ },
+ "tests": [
+  {
+   "title": "Should have a name",
+   "fullTitle": "USDR Should have a name",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should be named USD Receipt",
+   "fullTitle": "USDR Should be named USD Receipt",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a symbol",
+   "fullTitle": "USDR Should have a symbol",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have the symbol 'USDR'",
+   "fullTitle": "USDR Should have the symbol 'USDR'",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have an admin role",
+   "fullTitle": "USDR Should have an admin role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should set the admin role to the owner address",
+   "fullTitle": "USDR Should set the admin role to the owner address",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a 'MINTER' role",
+   "fullTitle": "USDR Should have a 'MINTER' role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a 'BURNER' role",
+   "fullTitle": "USDR Should have a 'BURNER' role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a 'FREEZER' role",
+   "fullTitle": "USDR Should have a 'FREEZER' role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a 'FROZEN' role",
+   "fullTitle": "USDR Should have a 'FROZEN' role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a 'PAUSER' role",
+   "fullTitle": "USDR Should have a 'PAUSER' role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a 'WHITELIST_USER' role",
+   "fullTitle": "USDR Should have a 'WHITELIST_USER' role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a 'FEE_CONTROLLER' role",
+   "fullTitle": "USDR Should have a 'FEE_CONTROLLER' role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a 'LIMITED_MINTER' role",
+   "fullTitle": "USDR Should have a 'LIMITED_MINTER' role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a basis rate",
+   "fullTitle": "USDR Should have a basis rate",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a variable rate",
+   "fullTitle": "USDR Should have a variable rate",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should NOT have a current fee collector",
+   "fullTitle": "USDR Should NOT have a current fee collector",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have free minting flag set to true",
+   "fullTitle": "USDR Should have free minting flag set to true",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have free burning flag set to true",
+   "fullTitle": "USDR Should have free burning flag set to true",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a cooldown multiplier",
+   "fullTitle": "USDR Should have a cooldown multiplier",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a commitment cooldown",
+   "fullTitle": "USDR Should have a commitment cooldown",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block last ADMIN from revoking own role",
+   "fullTitle": "USDR Should block last ADMIN from revoking own role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow MINTER to MINT",
+   "fullTitle": "USDR Should allow MINTER to MINT",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow BURNER to BURN from POOL",
+   "fullTitle": "USDR Should allow BURNER to BURN from POOL",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+   "fullTitle": "USDR Should collect default fees to currentFeeCollector during feeBankMint",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should revert if amount is not cleanly divided by basis rate",
+   "fullTitle": "USDR Should revert if amount is not cleanly divided by basis rate",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow FREEZER to FREEZE a USER",
+   "fullTitle": "USDR Should allow FREEZER to FREEZE a USER",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow PAUSER to PAUSE",
+   "fullTitle": "USDR Should allow PAUSER to PAUSE",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow PAUSER to UNPAUSE",
+   "fullTitle": "USDR Should allow PAUSER to UNPAUSE",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow FREEZER to UNFREEZE a USER",
+   "fullTitle": "USDR Should allow FREEZER to UNFREEZE a USER",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow OWNER to UPGRADE",
+   "fullTitle": "USDR Should allow OWNER to UPGRADE",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block NOT-MINTERS from MINTING to WHITELIST",
+   "fullTitle": "USDR Should block NOT-MINTERS from MINTING to WHITELIST",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+   "fullTitle": "USDR Should block NOT-BURNERS from BURNING from WHITELIST",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block NOT-FREEZERS from FREEZING",
+   "fullTitle": "USDR Should block NOT-FREEZERS from FREEZING",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block NOT-FREEZERS from UNFREEZING",
+   "fullTitle": "USDR Should block NOT-FREEZERS from UNFREEZING",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block FROZEN_USERS from SENDING",
+   "fullTitle": "USDR Should block FROZEN_USERS from SENDING",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block FROZEN_USERS from RECEIVING",
+   "fullTitle": "USDR Should block FROZEN_USERS from RECEIVING",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block FROZEN_USERS from RENOUNCING",
+   "fullTitle": "USDR Should block FROZEN_USERS from RENOUNCING",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block last ADMIN from RENOUNCING",
+   "fullTitle": "USDR Should block last ADMIN from RENOUNCING",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow ADMIN to set controls",
+   "fullTitle": "USDR Should allow ADMIN to set controls",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow LIMITED_MINTER to make a minting commitment",
+   "fullTitle": "USDR Should allow LIMITED_MINTER to make a minting commitment",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block LIMITED_MINTER to commit for non-whitelisted address",
+   "fullTitle": "USDR Should block LIMITED_MINTER to commit for non-whitelisted address",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block LIMITED_MINTER from committing before cooldown",
+   "fullTitle": "USDR Should block LIMITED_MINTER from committing before cooldown",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block LIMITED_MINTER from making two identical commitments",
+   "fullTitle": "USDR Should block LIMITED_MINTER from making two identical commitments",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+   "fullTitle": "USDR Should compute LIMITED_MINTER cooldown correctly after a commitment",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should compute minting cooldown correctly after a commitment",
+   "fullTitle": "USDR Should compute minting cooldown correctly after a commitment",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow limited minting after cooldown",
+   "fullTitle": "USDR Should allow limited minting after cooldown",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block limited minting before cooldown",
+   "fullTitle": "USDR Should block limited minting before cooldown",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow FREEZER to veto a queued mint",
+   "fullTitle": "USDR Should allow FREEZER to veto a queued mint",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should revert on malformed veto data",
+   "fullTitle": "USDR Should revert on malformed veto data",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow FEE_CONTROLLER to set the variable fee",
+   "fullTitle": "USDR Should allow FEE_CONTROLLER to set the variable fee",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should revert if variable fee doesn't cleanly divide basis rate",
+   "fullTitle": "USDR Should revert if variable fee doesn't cleanly divide basis rate",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should revert if variable fee is too high",
+   "fullTitle": "USDR Should revert if variable fee is too high",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should revert on burn",
+   "fullTitle": "USDR Should revert on burn",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should revert on burnFrom",
+   "fullTitle": "USDR Should revert on burnFrom",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  }
+ ],
+ "failures": [],
+ "passes": [
+  {
+   "title": "Should have a name",
+   "fullTitle": "USDR Should have a name",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should be named USD Receipt",
+   "fullTitle": "USDR Should be named USD Receipt",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a symbol",
+   "fullTitle": "USDR Should have a symbol",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have the symbol 'USDR'",
+   "fullTitle": "USDR Should have the symbol 'USDR'",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have an admin role",
+   "fullTitle": "USDR Should have an admin role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should set the admin role to the owner address",
+   "fullTitle": "USDR Should set the admin role to the owner address",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a 'MINTER' role",
+   "fullTitle": "USDR Should have a 'MINTER' role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a 'BURNER' role",
+   "fullTitle": "USDR Should have a 'BURNER' role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a 'FREEZER' role",
+   "fullTitle": "USDR Should have a 'FREEZER' role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a 'FROZEN' role",
+   "fullTitle": "USDR Should have a 'FROZEN' role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a 'PAUSER' role",
+   "fullTitle": "USDR Should have a 'PAUSER' role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a 'WHITELIST_USER' role",
+   "fullTitle": "USDR Should have a 'WHITELIST_USER' role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a 'FEE_CONTROLLER' role",
+   "fullTitle": "USDR Should have a 'FEE_CONTROLLER' role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a 'LIMITED_MINTER' role",
+   "fullTitle": "USDR Should have a 'LIMITED_MINTER' role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a basis rate",
+   "fullTitle": "USDR Should have a basis rate",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a variable rate",
+   "fullTitle": "USDR Should have a variable rate",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should NOT have a current fee collector",
+   "fullTitle": "USDR Should NOT have a current fee collector",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have free minting flag set to true",
+   "fullTitle": "USDR Should have free minting flag set to true",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have free burning flag set to true",
+   "fullTitle": "USDR Should have free burning flag set to true",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a cooldown multiplier",
+   "fullTitle": "USDR Should have a cooldown multiplier",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should have a commitment cooldown",
+   "fullTitle": "USDR Should have a commitment cooldown",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block last ADMIN from revoking own role",
+   "fullTitle": "USDR Should block last ADMIN from revoking own role",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow MINTER to MINT",
+   "fullTitle": "USDR Should allow MINTER to MINT",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow BURNER to BURN from POOL",
+   "fullTitle": "USDR Should allow BURNER to BURN from POOL",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+   "fullTitle": "USDR Should collect default fees to currentFeeCollector during feeBankMint",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should revert if amount is not cleanly divided by basis rate",
+   "fullTitle": "USDR Should revert if amount is not cleanly divided by basis rate",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow FREEZER to FREEZE a USER",
+   "fullTitle": "USDR Should allow FREEZER to FREEZE a USER",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow PAUSER to PAUSE",
+   "fullTitle": "USDR Should allow PAUSER to PAUSE",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow PAUSER to UNPAUSE",
+   "fullTitle": "USDR Should allow PAUSER to UNPAUSE",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow FREEZER to UNFREEZE a USER",
+   "fullTitle": "USDR Should allow FREEZER to UNFREEZE a USER",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow OWNER to UPGRADE",
+   "fullTitle": "USDR Should allow OWNER to UPGRADE",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block NOT-MINTERS from MINTING to WHITELIST",
+   "fullTitle": "USDR Should block NOT-MINTERS from MINTING to WHITELIST",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+   "fullTitle": "USDR Should block NOT-BURNERS from BURNING from WHITELIST",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block NOT-FREEZERS from FREEZING",
+   "fullTitle": "USDR Should block NOT-FREEZERS from FREEZING",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block NOT-FREEZERS from UNFREEZING",
+   "fullTitle": "USDR Should block NOT-FREEZERS from UNFREEZING",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block FROZEN_USERS from SENDING",
+   "fullTitle": "USDR Should block FROZEN_USERS from SENDING",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block FROZEN_USERS from RECEIVING",
+   "fullTitle": "USDR Should block FROZEN_USERS from RECEIVING",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block FROZEN_USERS from RENOUNCING",
+   "fullTitle": "USDR Should block FROZEN_USERS from RENOUNCING",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block last ADMIN from RENOUNCING",
+   "fullTitle": "USDR Should block last ADMIN from RENOUNCING",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow ADMIN to set controls",
+   "fullTitle": "USDR Should allow ADMIN to set controls",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow LIMITED_MINTER to make a minting commitment",
+   "fullTitle": "USDR Should allow LIMITED_MINTER to make a minting commitment",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block LIMITED_MINTER to commit for non-whitelisted address",
+   "fullTitle": "USDR Should block LIMITED_MINTER to commit for non-whitelisted address",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block LIMITED_MINTER from committing before cooldown",
+   "fullTitle": "USDR Should block LIMITED_MINTER from committing before cooldown",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block LIMITED_MINTER from making two identical commitments",
+   "fullTitle": "USDR Should block LIMITED_MINTER from making two identical commitments",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+   "fullTitle": "USDR Should compute LIMITED_MINTER cooldown correctly after a commitment",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should compute minting cooldown correctly after a commitment",
+   "fullTitle": "USDR Should compute minting cooldown correctly after a commitment",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow limited minting after cooldown",
+   "fullTitle": "USDR Should allow limited minting after cooldown",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should block limited minting before cooldown",
+   "fullTitle": "USDR Should block limited minting before cooldown",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow FREEZER to veto a queued mint",
+   "fullTitle": "USDR Should allow FREEZER to veto a queued mint",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should revert on malformed veto data",
+   "fullTitle": "USDR Should revert on malformed veto data",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should allow FEE_CONTROLLER to set the variable fee",
+   "fullTitle": "USDR Should allow FEE_CONTROLLER to set the variable fee",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should revert if variable fee doesn't cleanly divide basis rate",
+   "fullTitle": "USDR Should revert if variable fee doesn't cleanly divide basis rate",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should revert if variable fee is too high",
+   "fullTitle": "USDR Should revert if variable fee is too high",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should revert on burn",
+   "fullTitle": "USDR Should revert on burn",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  },
+  {
+   "title": "Should revert on burnFrom",
+   "fullTitle": "USDR Should revert on burnFrom",
+   "file": "test/metl-tests.js",
+   "currentRetry": 0,
+   "err": {}
+  }
+ ]
+}
