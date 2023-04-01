@@ -27,6 +27,8 @@
     "solidity-coverage": "^0.7.17"
   },
   "scripts": {
-    "deploy": "npx hardhat run scripts/deploy-metl.js"
+    "deploy": "npx hardhat run scripts/deploy-metl.js",
+    "setup": "npx hardhat run scripts/setup.js",
+    "livetest": "npx hardhat run scripts/livetest.js"
   }
 }
