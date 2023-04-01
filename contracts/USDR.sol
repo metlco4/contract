@@ -144,9 +144,9 @@ contract USDR is
     onlyRole(FEE_CONTROLLER)
   {
     // Variable fee must be adjusted in increments of 0.1%
-    require(newRate % 1000000 == 0, "Variable rate must be in increments of 0.1%!");
+    require(newRate % 1000000 == 0, "!Increment");
     // Variable fee max
-    require(newRate <= 100000000, "New Rate Too Large");
+    require(newRate <= 100000000, "!TooMuch");
     variableRate = newRate;
   }
 
@@ -185,7 +185,7 @@ contract USDR is
    */
   function revokeRole(bytes32 role, address account) public override {
     if (role == DEFAULT_ADMIN_ROLE) {
-      require(getRoleMemberCount(role) > 1, "Contract requires one admin");
+      require(getRoleMemberCount(role) > 1, "!Admin");
     }
     super.revokeRole(role, account);
   }
@@ -197,10 +197,10 @@ contract USDR is
    */
   function renounceRole(bytes32 role, address account) public override {
     if (role == FROZEN_USER) {
-      require(hasRole(FREEZER_ROLE, msg.sender), "Only role admin can revoke");
+      require(hasRole(FREEZER_ROLE, msg.sender), "!Frozen");
     }
     if (role == DEFAULT_ADMIN_ROLE) {
-      require(getRoleMemberCount(role) > 1, "Contract requires one admin");
+      require(getRoleMemberCount(role) > 1, "!Admin");
     }
     super.renounceRole(role, account);
   }
@@ -217,10 +217,10 @@ contract USDR is
     onlyWhitelist(recipient)
   {
     
-    require(commitUnlock[msg.sender] <= block.timestamp || commitUnlock[msg.sender] == 0, "Commitment cooldown");
+    require(commitUnlock[msg.sender] <= block.timestamp || commitUnlock[msg.sender] == 0, "!Commit");
     bytes32 mintHash = _commitmentHash(recipient, amount, transferId);
 
-    require(mintUnlock[mintHash] == 0, "Transaction already queued");
+    require(mintUnlock[mintHash] == 0, "!Queue");
 
     uint256 unlockTime = block.timestamp + (cooldownMultiplier * (amount / 1 ether));
     mintUnlock[mintHash] = unlockTime;
@@ -305,7 +305,7 @@ contract USDR is
   {
 
     bytes32 mintHash = _commitmentHash(recipient, amount, transferId);
-    require(mintUnlock[mintHash] <= block.timestamp, "Cooldown has not yet elapsed");
+    require(mintUnlock[mintHash] <= block.timestamp, "!Cooldown");
 
     uint256 fee;
 
@@ -379,8 +379,8 @@ contract USDR is
     address recipient,
     uint256 amount
   ) internal override whenNotPaused {
-    require(!hasRole(FROZEN_USER, sender), "Sender is currently frozen.");
-    require(!hasRole(FROZEN_USER, recipient), "Recipient is currently frozen.");
+    require(!hasRole(FROZEN_USER, sender), "!FromFrozen");
+    require(!hasRole(FROZEN_USER, recipient), "!ToFrozen");
     super._beforeTokenTransfer(sender, recipient, amount);
   }
 

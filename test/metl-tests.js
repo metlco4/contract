@@ -163,7 +163,7 @@ describe("USDR", function () {
 	it("Should block last ADMIN from revoking own role", async () => {
 		const AR = await METL.DEFAULT_ADMIN_ROLE();
 		 // eslint-disable-next-line no-unused-expressions
-		await expect(METL.revokeRole(AR, owner.address)).to.be.revertedWith("Contract requires one admin");
+		await expect(METL.revokeRole(AR, owner.address)).to.be.revertedWith("!Admin");
 	})
 
   it("Should allow MINTER to MINT", async () => {
@@ -313,7 +313,7 @@ describe("USDR", function () {
     await METL.connect(freezer).grantRole(handleHashString(FROZEN_USER), frozen.address);
     await expect(
       METL.connect(frozen).transfer(user.address, 1000)
-    ).to.be.revertedWith("Sender is currently frozen.");
+    ).to.be.revertedWith("!FromFrozen");
   });
 
   it("Should block FROZEN_USERS from RECEIVING", async () => {
@@ -325,19 +325,19 @@ describe("USDR", function () {
     await METL.connect(freezer).grantRole(handleHashString(FROZEN_USER), frozen.address);
     await expect(
       METL.connect(pool).transfer(frozen.address, 1000)
-    ).to.be.revertedWith("Recipient is currently frozen.");
+    ).to.be.revertedWith("!ToFrozen");
   });
 
 	it("Should block FROZEN_USERS from RENOUNCING", async () => {
 		await METL.grantRole(handleHashString(FREEZER_ROLE), freezer.address);
 		await METL.connect(freezer).grantRole(handleHashString(FROZEN_USER), frozen.address);
 		const FR = await METL.FROZEN_USER();
-		await expect(METL.connect(frozen).renounceRole(FR, frozen.address)).to.be.revertedWith("Only role admin can revoke");
+		await expect(METL.connect(frozen).renounceRole(FR, frozen.address)).to.be.revertedWith("!Frozen");
 	});
 	
 	it("Should block last ADMIN from RENOUNCING", async () => {
 		const DAR = await METL.DEFAULT_ADMIN_ROLE();
-		await expect(METL.renounceRole(DAR, owner.address)).to.be.revertedWith("Contract requires one admin")
+		await expect(METL.renounceRole(DAR, owner.address)).to.be.revertedWith("!Admin")
 	});
 
     it("Should allow ADMIN to set controls", async () => {
@@ -373,7 +373,7 @@ describe("USDR", function () {
       await expect(
           METL.connect(minter).commitMint(
               minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString)
-          )).to.be.revertedWith("Commitment cooldown");
+          )).to.be.revertedWith("!Commit");
     });
 
     it("Should block LIMITED_MINTER from making two identical commitments", async () => {
@@ -386,7 +386,7 @@ describe("USDR", function () {
       await expect(
           METL.connect(minter).commitMint(
               minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString)
-          )).to.be.revertedWith("Transaction already queued");
+          )).to.be.revertedWith("!Queue");
     });
 
     it("Should compute LIMITED_MINTER cooldown correctly after a commitment", async () => {
@@ -425,7 +425,7 @@ describe("USDR", function () {
       await METL.grantRole(handleHashString(LIMITED_MINTER), minter.address);
       await METL.grantRole(handleHashString(WHITELIST_USER), minter.address);
       await METL.connect(minter).commitMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString));
-      await expect(METL.connect(minter).limitedMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString))).to.be.revertedWith("Cooldown has not yet elapsed");
+      await expect(METL.connect(minter).limitedMint(minter.address, BigNumber.from("1000" + DECIMEL_ZEROES), handleHashString(transactionString))).to.be.revertedWith("!Cooldown");
     });
 
     it("Should allow FREEZER to veto a queued mint", async () => {
@@ -457,12 +457,12 @@ describe("USDR", function () {
 
     it("Should revert if variable fee doesn't cleanly divide basis rate", async () => {
       await METL.grantRole(handleHashString(FEE_CONTROLLER), minter.address);
-      await expect(METL.connect(minter).updateVariableRate(100000001)).to.be.revertedWith("Variable rate must be in increments of 0.1%!");
+      await expect(METL.connect(minter).updateVariableRate(100000001)).to.be.revertedWith("!Increment");
     });
 
     it("Should revert if variable fee is too high", async () => {
       await METL.grantRole(handleHashString(FEE_CONTROLLER), minter.address);
-      await expect(METL.connect(minter).updateVariableRate(101000000)).to.be.revertedWith("New Rate Too Large");
+      await expect(METL.connect(minter).updateVariableRate(101000000)).to.be.revertedWith("!TooMuch");
     });
 
     it("Should revert on burn", async () => {
