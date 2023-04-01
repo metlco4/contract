@@ -1968,7 +1968,7 @@ bn.js@^5.0.0, bn.js@^5.1.1, bn.js@^5.1.2, bn.js@^5.1.3, bn.js@^5.2.0, bn.js@^5.2
 
 body-parser@1.20.1:
   version "1.20.1"
-  resolved "https://registry.npmjs.org/body-parser/-/body-parser-1.20.1.tgz"
+  resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.20.1.tgz#b1812a8912c195cd371a3ee5e66faa2338a5c668"
   dependencies:
     bytes "3.1.2"
     content-type "~1.0.4"
@@ -1985,7 +1985,7 @@ body-parser@1.20.1:
 
 body-parser@^1.16.0:
   version "1.20.2"
-  resolved "https://registry.npmjs.org/body-parser/-/body-parser-1.20.2.tgz"
+  resolved "https://registry.yarnpkg.com/body-parser/-/body-parser-1.20.2.tgz#6feb0e21c4724d06de7ff38da36dad4f57a747fd"
   dependencies:
     bytes "3.1.2"
     content-type "~1.0.5"
@@ -3756,7 +3756,7 @@ expand-brackets@^2.1.4:
 
 express@^4.14.0:
   version "4.18.2"
-  resolved "https://registry.npmjs.org/express/-/express-4.18.2.tgz"
+  resolved "https://registry.yarnpkg.com/express/-/express-4.18.2.tgz#3fabe08296e930c796c19e3c516979386ba9fd59"
   dependencies:
     accepts "~1.3.8"
     array-flatten "1.1.1"
@@ -6682,13 +6682,13 @@ punycode@^2.1.1:
 
 qs@6.11.0:
   version "6.11.0"
-  resolved "https://registry.npmjs.org/qs/-/qs-6.11.0.tgz"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.11.0.tgz#fd0d963446f7a65e1367e01abd85429453f0c37a"
   dependencies:
     side-channel "^1.0.4"
 
 qs@^6.4.0, qs@^6.7.0, qs@^6.9.4:
   version "6.11.1"
-  resolved "https://registry.npmjs.org/qs/-/qs-6.11.1.tgz"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.11.1.tgz#6c29dff97f0c0060765911ba65cbc9764186109f"
   dependencies:
     side-channel "^1.0.4"
 
