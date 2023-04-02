@@ -1,89 +1,3703 @@
 {
  "contracts/USDR.sol": {
-  "120": [],
-  "121": [],
-  "122": [],
-  "123": [],
-  "124": [],
-  "125": [],
-  "126": [],
-  "127": [],
-  "128": [],
-  "129": [],
-  "130": [],
-  "134": [],
-  "135": [],
-  "147": [],
-  "149": [],
-  "150": [],
-  "167": [],
-  "168": [],
-  "169": [],
-  "170": [],
-  "178": [],
-  "187": [],
-  "188": [],
-  "190": [],
-  "199": [],
-  "200": [],
-  "202": [],
-  "203": [],
+  "120": [
+   {
+    "title": "Should have a name",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should be named USD Receipt",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a symbol",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have the symbol 'USDR'",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have an admin role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should set the admin role to the owner address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'BURNER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FREEZER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FROZEN' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'PAUSER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'WHITELIST_USER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FEE_CONTROLLER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'LIMITED_MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a variable rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should NOT have a current fee collector",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free minting flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free burning flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a cooldown multiplier",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a commitment cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from revoking own role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to FREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to PAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to UNPAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to UNFREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-MINTERS from MINTING to WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from FREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from UNFREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from SENDING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow ADMIN to set controls",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER to commit for non-whitelisted address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FEE_CONTROLLER to set the variable fee",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee doesn't cleanly divide basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee is too high",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burn",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burnFrom",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "121": [
+   {
+    "title": "Should have a name",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should be named USD Receipt",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a symbol",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have the symbol 'USDR'",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have an admin role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should set the admin role to the owner address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'BURNER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FREEZER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FROZEN' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'PAUSER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'WHITELIST_USER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FEE_CONTROLLER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'LIMITED_MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a variable rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should NOT have a current fee collector",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free minting flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free burning flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a cooldown multiplier",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a commitment cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from revoking own role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to FREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to PAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to UNPAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to UNFREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-MINTERS from MINTING to WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from FREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from UNFREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from SENDING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow ADMIN to set controls",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER to commit for non-whitelisted address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FEE_CONTROLLER to set the variable fee",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee doesn't cleanly divide basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee is too high",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burn",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burnFrom",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "122": [
+   {
+    "title": "Should have a name",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should be named USD Receipt",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a symbol",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have the symbol 'USDR'",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have an admin role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should set the admin role to the owner address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'BURNER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FREEZER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FROZEN' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'PAUSER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'WHITELIST_USER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FEE_CONTROLLER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'LIMITED_MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a variable rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should NOT have a current fee collector",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free minting flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free burning flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a cooldown multiplier",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a commitment cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from revoking own role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to FREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to PAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to UNPAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to UNFREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-MINTERS from MINTING to WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from FREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from UNFREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from SENDING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow ADMIN to set controls",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER to commit for non-whitelisted address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FEE_CONTROLLER to set the variable fee",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee doesn't cleanly divide basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee is too high",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burn",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burnFrom",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "123": [
+   {
+    "title": "Should have a name",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should be named USD Receipt",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a symbol",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have the symbol 'USDR'",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have an admin role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should set the admin role to the owner address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'BURNER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FREEZER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FROZEN' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'PAUSER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'WHITELIST_USER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FEE_CONTROLLER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'LIMITED_MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a variable rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should NOT have a current fee collector",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free minting flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free burning flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a cooldown multiplier",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a commitment cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from revoking own role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to FREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to PAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to UNPAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to UNFREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-MINTERS from MINTING to WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from FREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from UNFREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from SENDING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow ADMIN to set controls",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER to commit for non-whitelisted address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FEE_CONTROLLER to set the variable fee",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee doesn't cleanly divide basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee is too high",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burn",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burnFrom",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "124": [
+   {
+    "title": "Should have a name",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should be named USD Receipt",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a symbol",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have the symbol 'USDR'",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have an admin role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should set the admin role to the owner address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'BURNER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FREEZER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FROZEN' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'PAUSER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'WHITELIST_USER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FEE_CONTROLLER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'LIMITED_MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a variable rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should NOT have a current fee collector",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free minting flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free burning flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a cooldown multiplier",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a commitment cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from revoking own role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to FREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to PAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to UNPAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to UNFREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-MINTERS from MINTING to WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from FREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from UNFREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from SENDING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow ADMIN to set controls",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER to commit for non-whitelisted address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FEE_CONTROLLER to set the variable fee",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee doesn't cleanly divide basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee is too high",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burn",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burnFrom",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "125": [
+   {
+    "title": "Should have a name",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should be named USD Receipt",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a symbol",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have the symbol 'USDR'",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have an admin role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should set the admin role to the owner address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'BURNER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FREEZER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FROZEN' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'PAUSER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'WHITELIST_USER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FEE_CONTROLLER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'LIMITED_MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a variable rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should NOT have a current fee collector",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free minting flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free burning flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a cooldown multiplier",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a commitment cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from revoking own role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to FREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to PAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to UNPAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to UNFREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-MINTERS from MINTING to WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from FREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from UNFREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from SENDING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow ADMIN to set controls",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER to commit for non-whitelisted address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FEE_CONTROLLER to set the variable fee",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee doesn't cleanly divide basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee is too high",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burn",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burnFrom",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "126": [
+   {
+    "title": "Should have a name",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should be named USD Receipt",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a symbol",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have the symbol 'USDR'",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have an admin role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should set the admin role to the owner address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'BURNER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FREEZER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FROZEN' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'PAUSER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'WHITELIST_USER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FEE_CONTROLLER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'LIMITED_MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a variable rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should NOT have a current fee collector",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free minting flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free burning flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a cooldown multiplier",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a commitment cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from revoking own role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to FREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to PAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to UNPAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to UNFREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-MINTERS from MINTING to WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from FREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from UNFREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from SENDING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow ADMIN to set controls",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER to commit for non-whitelisted address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FEE_CONTROLLER to set the variable fee",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee doesn't cleanly divide basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee is too high",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burn",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burnFrom",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "127": [
+   {
+    "title": "Should have a name",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should be named USD Receipt",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a symbol",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have the symbol 'USDR'",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have an admin role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should set the admin role to the owner address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'BURNER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FREEZER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FROZEN' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'PAUSER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'WHITELIST_USER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FEE_CONTROLLER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'LIMITED_MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a variable rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should NOT have a current fee collector",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free minting flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free burning flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a cooldown multiplier",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a commitment cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from revoking own role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to FREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to PAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to UNPAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to UNFREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-MINTERS from MINTING to WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from FREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from UNFREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from SENDING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow ADMIN to set controls",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER to commit for non-whitelisted address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FEE_CONTROLLER to set the variable fee",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee doesn't cleanly divide basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee is too high",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burn",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burnFrom",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "128": [
+   {
+    "title": "Should have a name",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should be named USD Receipt",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a symbol",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have the symbol 'USDR'",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have an admin role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should set the admin role to the owner address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'BURNER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FREEZER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FROZEN' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'PAUSER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'WHITELIST_USER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FEE_CONTROLLER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'LIMITED_MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a variable rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should NOT have a current fee collector",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free minting flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free burning flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a cooldown multiplier",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a commitment cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from revoking own role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to FREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to PAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to UNPAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to UNFREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-MINTERS from MINTING to WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from FREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from UNFREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from SENDING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow ADMIN to set controls",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER to commit for non-whitelisted address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FEE_CONTROLLER to set the variable fee",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee doesn't cleanly divide basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee is too high",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burn",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burnFrom",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "129": [
+   {
+    "title": "Should have a name",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should be named USD Receipt",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a symbol",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have the symbol 'USDR'",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have an admin role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should set the admin role to the owner address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'BURNER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FREEZER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FROZEN' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'PAUSER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'WHITELIST_USER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FEE_CONTROLLER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'LIMITED_MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a variable rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should NOT have a current fee collector",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free minting flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free burning flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a cooldown multiplier",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a commitment cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from revoking own role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to FREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to PAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to UNPAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to UNFREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-MINTERS from MINTING to WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from FREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from UNFREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from SENDING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow ADMIN to set controls",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER to commit for non-whitelisted address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FEE_CONTROLLER to set the variable fee",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee doesn't cleanly divide basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee is too high",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burn",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burnFrom",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "130": [
+   {
+    "title": "Should have a name",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should be named USD Receipt",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a symbol",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have the symbol 'USDR'",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have an admin role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should set the admin role to the owner address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'BURNER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FREEZER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FROZEN' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'PAUSER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'WHITELIST_USER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'FEE_CONTROLLER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a 'LIMITED_MINTER' role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a variable rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should NOT have a current fee collector",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free minting flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have free burning flag set to true",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a cooldown multiplier",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should have a commitment cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from revoking own role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to FREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to PAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to UNPAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to UNFREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-MINTERS from MINTING to WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from FREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from UNFREEZING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from SENDING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow ADMIN to set controls",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER to commit for non-whitelisted address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FEE_CONTROLLER to set the variable fee",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee doesn't cleanly divide basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee is too high",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burn",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on burnFrom",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "134": [
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER to commit for non-whitelisted address",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "135": [
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "147": [
+   {
+    "title": "Should allow FEE_CONTROLLER to set the variable fee",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee doesn't cleanly divide basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee is too high",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "149": [
+   {
+    "title": "Should allow FEE_CONTROLLER to set the variable fee",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if variable fee is too high",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "150": [
+   {
+    "title": "Should allow FEE_CONTROLLER to set the variable fee",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "167": [
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow ADMIN to set controls",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "168": [
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow ADMIN to set controls",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "169": [
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow ADMIN to set controls",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "170": [
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow ADMIN to set controls",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "178": [
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "187": [
+   {
+    "title": "Should block last ADMIN from revoking own role",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to UNFREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from UNFREEZING",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "188": [
+   {
+    "title": "Should block last ADMIN from revoking own role",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "190": [
+   {
+    "title": "Should allow FREEZER to UNFREEZE a USER",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-FREEZERS from UNFREEZING",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "199": [
+   {
+    "title": "Should block FROZEN_USERS from RENOUNCING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block last ADMIN from RENOUNCING",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "200": [
+   {
+    "title": "Should block FROZEN_USERS from RENOUNCING",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "202": [
+   {
+    "title": "Should block last ADMIN from RENOUNCING",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "203": [
+   {
+    "title": "Should block last ADMIN from RENOUNCING",
+    "file": "test/metl-tests.js"
+   }
+  ],
   "205": [],
-  "220": [],
-  "221": [],
-  "223": [],
-  "225": [],
-  "226": [],
-  "228": [],
-  "229": [],
-  "231": [],
-  "245": [],
-  "257": [],
-  "258": [],
-  "273": [],
-  "275": [],
-  "276": [],
-  "279": [],
-  "280": [],
-  "281": [],
-  "283": [],
-  "284": [],
-  "287": [],
-  "288": [],
+  "220": [
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "221": [
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "223": [
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "225": [
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "226": [
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "228": [
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "229": [
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "231": [
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "245": [
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow LIMITED_MINTER to make a minting commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from committing before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute LIMITED_MINTER cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "257": [
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "258": [
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "273": [
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "275": [
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "276": [
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert if amount is not cleanly divided by basis rate",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "279": [
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "280": [
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "281": [
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "283": [
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "284": [
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "287": [
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "288": [
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   }
+  ],
   "289": [],
-  "292": [],
-  "307": [],
-  "308": [],
-  "310": [],
-  "312": [],
+  "292": [
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "307": [
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "308": [
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block limited minting before cooldown",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "310": [
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "312": [
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   }
+  ],
   "313": [],
-  "316": [],
-  "317": [],
-  "318": [],
-  "320": [],
+  "316": [
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "317": [
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "318": [
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "320": [
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   }
+  ],
   "321": [],
-  "324": [],
-  "325": [],
-  "338": [],
-  "339": [],
+  "324": [
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "325": [
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "338": [
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "339": [
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   }
+  ],
   "340": [],
-  "343": [],
+  "343": [
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   }
+  ],
   "344": [],
-  "347": [],
-  "348": [],
-  "349": [],
-  "362": [],
-  "363": [],
-  "365": [],
-  "367": [],
-  "368": [],
-  "382": [],
-  "383": [],
-  "384": [],
-  "391": [],
-  "398": [],
-  "405": [],
+  "347": [
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "348": [
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "349": [
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "362": [
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "363": [
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "365": [
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "367": [
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "368": [
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "382": [
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to UNPAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from SENDING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "383": [
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to UNPAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "384": [
+   {
+    "title": "Should allow MINTER to MINT",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow BURNER to BURN from POOL",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should collect default fees to currentFeeCollector during feeBankMint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to UNPAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow OWNER to UPGRADE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block NOT-BURNERS from BURNING from WHITELIST",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should block FROZEN_USERS from RECEIVING",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "391": [
+   {
+    "title": "Should allow PAUSER to PAUSE",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow PAUSER to UNPAUSE",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "398": [
+   {
+    "title": "Should allow PAUSER to UNPAUSE",
+    "file": "test/metl-tests.js"
+   }
+  ],
+  "405": [
+   {
+    "title": "Should revert on burn",
+    "file": "test/metl-tests.js"
+   }
+  ],
   "412": [],
-  "422": []
+  "422": [
+   {
+    "title": "Should block LIMITED_MINTER from making two identical commitments",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should compute minting cooldown correctly after a commitment",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow limited minting after cooldown",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should allow FREEZER to veto a queued mint",
+    "file": "test/metl-tests.js"
+   },
+   {
+    "title": "Should revert on malformed veto data",
+    "file": "test/metl-tests.js"
+   }
+  ]
  }
 }
