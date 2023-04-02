@@ -174,6 +174,19 @@ describe("USDR", function () {
     expect(await usdr.totalSupply()).to.equal(1000);
   });
 
+  it("Should block MINT to zero address", async () => {
+    await usdr.grantRole(handleHashString(WHITELIST_USER), ethers.constants.AddressZero);
+    await usdr.grantRole(handleHashString(MINTER_ROLE), minter.address);
+    await expect(usdr.connect(minter).mint(ethers.constants.AddressZero, 1000, handleHashString(transactionString))).to.be.revertedWith("ERC20: mint to the zero address");
+  });
+
+  it("Should block transfer to zero address", async () => {
+    await usdr.grantRole(handleHashString(WHITELIST_USER), pool.address);
+    await usdr.grantRole(handleHashString(MINTER_ROLE), minter.address);
+    await usdr.connect(minter).mint(pool.address, 1000, handleHashString(transactionString));
+    await expect(usdr.connect(pool).transfer(ethers.constants.AddressZero, 1000)).to.be.revertedWith("ERC20: transfer to the zero address");
+  });
+
   it("Should allow BURNER to BURN from POOL", async () => {
     await usdr.grantRole(handleHashString(WHITELIST_USER), pool.address);
     await usdr.grantRole(handleHashString(MINTER_ROLE), minter.address);
