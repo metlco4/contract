@@ -25,6 +25,7 @@ describe("USDR", function () {
   const PAUSER_ROLE = "PAUSER_ROLE";
   const WHITELIST_USER = "WHITELIST_USER";
   const FEE_CONTROLLER = "FEE_CONTROLLER";
+  const BURN_PROOF = "BURN_PROOF";
 
   const COMMITMENT_COOLDOWN = 180;
   const COOLDOWN_MULTIPLIER = 9;
@@ -182,12 +183,21 @@ describe("USDR", function () {
     expect(await usdr.totalSupply()).to.equal(250);
   });
 
+  it("Should block BURNER from BURN_PROOF address", async () => {
+    await usdr.grantRole(handleHashString(WHITELIST_USER), pool.address);
+    await usdr.grantRole(handleHashString(MINTER_ROLE), minter.address);
+    await usdr.grantRole(handleHashString(BURNER_ROLE), burner.address);
+    await usdr.grantRole(handleHashString(BURN_PROOF), pool.address);
+    await usdr.connect(minter).mint(pool.address, 1000, handleHashString(transactionString));
+    await expect(usdr.connect(burner).bankBurn(pool.address, 750, handleHashString(transactionString))).to.be.revertedWith("!BurnBan");
+  });
+
   it("Should collect default fees to currentFeeCollector during feeBankMint", async () => {
     await usdr.grantRole(handleHashString(WHITELIST_USER), pool.address);
     await usdr.grantRole(handleHashString(MINTER_ROLE), minter.address);
     await usdr.grantRole(handleHashString(FEE_CONTROLLER), owner.address);
-    await usdr.setControls(false, false, 0, 9);
     await usdr.setFeeCollector(owner.address);
+    await usdr.setControls(false, false, 0, 9);
     await usdr.connect(minter).mint(pool.address, 1000000000000000, handleHashString(transactionString));
     expect(await usdr.balanceOf(owner.address)).to.equal(1000000000000);
   });
@@ -196,8 +206,8 @@ describe("USDR", function () {
     await usdr.grantRole(handleHashString(WHITELIST_USER), pool.address);
     await usdr.grantRole(handleHashString(MINTER_ROLE), minter.address);
     await usdr.grantRole(handleHashString(FEE_CONTROLLER), owner.address);
-    await usdr.setControls(false, false, 0, 9);
     await usdr.setFeeCollector(owner.address);
+    await usdr.setControls(false, false, 0, 9);
     await expect(usdr.connect(minter).mint(pool.address, 1000000000000001, handleHashString(transactionString))).to.be.revertedWith("!Precision");
   });
 

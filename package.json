@@ -29,6 +29,6 @@
   },
   "scripts": {
     "deploy": "npx hardhat run scripts/deploy-metl.js",
-    "livetest": "npx hardhat run scripts/deploy-testnet.js"
+    "livetest_fuji": "npx hardhat run scripts/deploy-testnet.js --network fuji"
   }
 }

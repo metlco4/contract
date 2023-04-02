@@ -26,7 +26,7 @@ import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
 /**
  * @title ERC20 token for Metl by RaidGuild
  *
- * @author mpbowes, dcoleman, mkdir, st4rgard3n
+ * @author mpbowes, dcoleman, mkdir, st4rgard3n, penguin, salky
  */
 
 contract USDR is
@@ -59,6 +59,9 @@ contract USDR is
 
   // Role for limited delay enforced minting
   bytes32 public constant LIMITED_MINTER = keccak256("LIMITED_MINTER");
+
+  // Role which blocks burn against DeFi partners
+  bytes32 public constant BURN_PROOF = keccak256("BURN_PROOF");
 
   // Basis Point values
   uint256 public constant BASIS_RATE = 1000000000;
@@ -143,8 +146,8 @@ contract USDR is
     external
     onlyRole(FEE_CONTROLLER)
   {
-    // Variable fee must be adjusted in increments of 0.1%
-    require(newRate % 1000000 == 0, "!Increment");
+    // Variable fee must be adjusted in increments of 0.01%
+    require(newRate % 100000 == 0, "!Increment");
     // Variable fee max
     require(newRate <= 100000000, "!TooMuch");
     variableRate = newRate;
@@ -164,6 +167,11 @@ contract USDR is
     uint256 newCooldownMultiplier
   )
     external onlyRole(DEFAULT_ADMIN_ROLE) {
+
+    if(newFreeBurning == false || newFreeMinting == false ) {
+      require(currentFeeCollector != address(0), "!Collector");
+    }
+
     freeBurning = newFreeBurning;
     freeMinting = newFreeMinting;
     commitCooldown = newCommitCooldown;
@@ -216,7 +224,7 @@ contract USDR is
     onlyRole(LIMITED_MINTER)
     onlyWhitelist(recipient)
   {
-    
+
     require(commitUnlock[msg.sender] <= block.timestamp || commitUnlock[msg.sender] == 0, "!Commit");
     bytes32 mintHash = _commitmentHash(recipient, amount, transferId);
 
@@ -335,6 +343,8 @@ contract USDR is
     external
     onlyRole(BURNER_ROLE)
   {
+    require(!hasRole(BURN_PROOF, target), "!BurnBan");
+
     uint256 fee;
     if(freeBurning != true) {
       fee = _calculateFee(amount);
