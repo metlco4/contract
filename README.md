@@ -41,6 +41,9 @@ Add tests using Mocha, Chai, and Ethers.
 
 To run tests, run `npx hardhat test` from the command line.
 
+### MythX Path Remapping:
+`mythx analyze --mode deep ./contracts/usdr.sol --remap-import "@openzeppelin/=$(pwd)/node_modules/@openzeppelin/"`
+
 ## Deploying
 
 ### To deploy to ETH Mainnet or Testnets, add a network to `src/hardhat.config.js`
